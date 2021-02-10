@@ -27,13 +27,14 @@ public class Main {
         board = new Board();
         board.print();
         System.out.println("\n"
-                + "Here is our starting player!! : " + board.startString
-                + "\nPlayer 1 (" + board.startString + "), pick a number"
+                + "Here is our starting player!! : " + board.currentPlayer
+                + "\nPlayer 1 (" + board.currentPlayer + "), pick a number"
                 + "\nfrom 0 to " + (board.boardSize - 1)  + " to make your mark!");
 
         while(!board.isGameOver) {
-            System.out.println("Give me another input!"); // TBD
-            scanner.nextLine();
+            int selection = scanner.nextInt();
+            Board.doTurn(selection);
+            board.print();
         }
     }
 }

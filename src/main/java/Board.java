@@ -1,8 +1,6 @@
 package main.java;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import java.util.*;
 
 /*
  * [
@@ -13,48 +11,61 @@ import java.util.List;
  * */
 
 class Board {
-    String[][] board; // in the future, would like user to be able to create variable sized board
-    int counter;
+    static String[][] board; // in the future, would like user to be able to create variable sized board
+    static int counter;
     int boardSize;
-    String startString;
+    static String currentPlayer;
+    static String[] players;
     boolean isGameOver;
+    static Map<Integer, int[]> position;
 
     public Board() {
         board = new String[3][3];
-        int next = 0;
+        players = new String[] {"x", "o"};
+        int positionIndex = 0;
+        position = new HashMap<>();
         for (int i = 0; i < board.length; i++) {
             for (int j = 0; j < board[0].length; j++) {
-                board[i][j] = String.valueOf(next++);
+                position.put(positionIndex, new int[] {i, j});
+                board[i][j] = String.valueOf(positionIndex++);
             }
         }
+
         counter = 0;
         boardSize = board.length * board[0].length;
-        startString = Math.random() < 0.5 ? "x" : "o";
+        currentPlayer = Math.random() < 0.5 ? players[0] : players[1];
         isGameOver = false;
     }
 
-    public boolean doTurn(String playerString, int r, int c) {
+    private static int[] positionLookup(int key) {
+        return position.get(key);
+    }
+
+    static boolean doTurn(int index) {
         boolean turnSuccess = false;
-        List<String> markers = new ArrayList(Arrays.asList("o", "x"));
 
-        if (!markers.contains(playerString)) return false;
+        int[] pos = positionLookup(index);
+        int r = pos[0], c = pos[1];
 
-        if (board[r][c] != ".") {
+        if (Arrays.stream(players).noneMatch(currentPlayer::equals)) {
             counter++;
-            board[r][c] = playerString;
-            checkWinner(playerString, r, c); // if not false, WE HAVE A WINNER
+            board[r][c] = currentPlayer;
+            checkWinner(currentPlayer, r, c); // if not false, WE HAVE A WINNER
             turnSuccess = true;
         }
 
-        if (counter == boardSize) {
+//        if (counter == boardSize) {
             // game is finished!
             // replay?!
-        }
+//        }
+
+        // changes the player character
+        currentPlayer = currentPlayer.equals(players[0]) ? players[1] : players[0];
 
         return turnSuccess; // request a different input somehow
     }
 
-    public boolean checkWinner(String playerString, int row, int column) {
+    private static boolean checkWinner(String playerString, int row, int column) {
         // check row for winner
         boolean rowWinner = checkRow(playerString, row);
         // check column for winner
@@ -65,7 +76,7 @@ class Board {
         return (rowWinner || columnWinner || diagonalWinner);
     }
 
-    private boolean checkRow(String playerString, int row) {
+    private static boolean checkRow(String playerString, int row) {
         String startValue = playerString;
         int j = 0;
         String checkedValue = board[row][j];
@@ -75,7 +86,7 @@ class Board {
         return true;
     }
 
-    private boolean checkColumn(String playerString, int column) {
+    private static boolean checkColumn(String playerString, int column) {
         String startValue = playerString;
         int i = 0;
         String checkedValue = board[i][column];
@@ -85,7 +96,7 @@ class Board {
         return true;
     }
 
-    private boolean checkDiagonal(String playerString, int row, int column) {
+    private static boolean checkDiagonal(String playerString, int row, int column) {
         // check to see if it's upper left diagonal or upper right diagonal
         boolean upperLeftDiag = false;
         boolean upperRightDiag = false;
