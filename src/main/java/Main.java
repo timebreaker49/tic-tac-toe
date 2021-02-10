@@ -10,7 +10,7 @@ public class Main {
 
         System.out.println("Are you ready to play?!?! Enter 'y' or 'n'");
         String s = scanner.nextLine();
-        while(!s.equals("y  ")) {
+        while(!s.equals("y")) {
             System.out.println("How bout now?!?! Enter 'y' or 'n'");
             s = scanner.nextLine();
         }
@@ -31,9 +31,9 @@ public class Main {
                 + "\nPlayer 1 (" + board.startString + "), pick a number"
                 + "\nfrom 0 to " + (board.boardSize - 1)  + " to make your mark!");
 
-        while(board.isGameOver) {
-            scanner.nextLine();
+        while(!board.isGameOver) {
             System.out.println("Give me another input!"); // TBD
+            scanner.nextLine();
         }
     }
 }
