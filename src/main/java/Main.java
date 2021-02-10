@@ -7,10 +7,10 @@ public class Main {
     public static void main(String[] args) {
         Board board = null;
         Scanner scanner = new Scanner(System.in);
-        
+
         System.out.println("Are you ready to play?!?! Enter 'y' or 'n'");
         String s = scanner.nextLine();
-        while(!s.equals("y")) {
+        while(!s.equals("y  ")) {
             System.out.println("How bout now?!?! Enter 'y' or 'n'");
             s = scanner.nextLine();
         }
