@@ -12,11 +12,11 @@ import java.util.*;
 
 class Board {
     static String[][] board; // in the future, would like user to be able to create variable sized board
-    static int counter;
+    static int moveCounter;
     int boardSize;
     static String currentPlayer;
     static String[] players;
-    boolean isGameOver;
+    static int isGameOver;
     static Map<Integer, int[]> position;
 
     public Board() {
@@ -31,10 +31,10 @@ class Board {
             }
         }
 
-        counter = 0;
+        moveCounter = 0;
         boardSize = board.length * board[0].length;
         currentPlayer = Math.random() < 0.5 ? players[0] : players[1];
-        isGameOver = false;
+        isGameOver = 0;
     }
 
     private static int[] positionLookup(int key) {
@@ -42,15 +42,23 @@ class Board {
     }
 
     static boolean doTurn(int index) {
-        boolean turnSuccess = false;
+        // digit check
+        String digitCheck = "\\d+";
+        String validationString = String.valueOf(index);
+        if(!validationString.matches(digitCheck)) return false;
 
+        // board check
+        boolean turnSuccess = false;
         int[] pos = positionLookup(index);
         int r = pos[0], c = pos[1];
 
-        if (Arrays.stream(players).noneMatch(currentPlayer::equals)) {
-            counter++;
-            board[r][c] = currentPlayer;
-            checkWinner(currentPlayer, r, c); // if not false, WE HAVE A WINNER
+        // if board position is available, mark board
+        if (board[r][c].matches(digitCheck)) {
+            moveCounter++; // marks where we are in the game
+            board[r][c] = currentPlayer; // updates the board
+            boolean winCheck = checkWinner(currentPlayer, r, c);
+            if(winCheck) isGameOver = 1;
+            currentPlayer = currentPlayer.equals(players[0]) ? players[1] : players[0]; // updates current player
             turnSuccess = true;
         }
 
@@ -58,9 +66,6 @@ class Board {
             // game is finished!
             // replay?!
 //        }
-
-        // changes the player character
-        currentPlayer = currentPlayer.equals(players[0]) ? players[1] : players[0];
 
         return turnSuccess; // request a different input somehow
     }
@@ -77,21 +82,19 @@ class Board {
     }
 
     private static boolean checkRow(String playerString, int row) {
-        String startValue = playerString;
         int j = 0;
-        String checkedValue = board[row][j];
-        while (j++ < board[0].length) {
-            if (checkedValue != startValue) return false;
+        while (j < board[0].length) {
+            String checkedValue = board[row][j++];
+            if (!checkedValue.equals(playerString)) return false;
         }
         return true;
     }
 
     private static boolean checkColumn(String playerString, int column) {
-        String startValue = playerString;
         int i = 0;
-        String checkedValue = board[i][column];
-        while (i++ < board.length) {
-            if (checkedValue != startValue) return false;
+        while (i < board.length) {
+            String checkedValue = board[i++][column];
+            if (!checkedValue.equals(playerString)) return false;
         }
         return true;
     }
@@ -100,7 +103,6 @@ class Board {
         // check to see if it's upper left diagonal or upper right diagonal
         boolean upperLeftDiag = false;
         boolean upperRightDiag = false;
-        String startValue = playerString;
         int rowLength = board[0].length;
 
         // checks for diagonal from top left to bottom right
@@ -108,15 +110,15 @@ class Board {
         int j = 0;
         int counterOne = 0;
         while (i < rowLength) {
-            if (board[i++][j++] == playerString) counterOne++;
+            if (board[i++][j++].equals(playerString)) counterOne++;
             if (counterOne == rowLength - 1) upperLeftDiag = true;
         }
         // checks for diagonal from top right to bottom left
         i = 0;
-        j = rowLength;
+        j = rowLength - 1;
         int counterTwo = 0;
         while (j > 0) {
-            if (board[i++][j--] == playerString) counterTwo++;
+            if (board[i++][j--].equals(playerString)) counterTwo++;
             if (counterTwo == rowLength - 1) upperRightDiag = true;
         }
 
