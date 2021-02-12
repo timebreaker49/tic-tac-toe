@@ -41,18 +41,14 @@ class Board {
         return position.get(key);
     }
 
-    static boolean doTurn(int index) {
-        // digit check
-        String digitCheck = "\\d+";
-        String validationString = String.valueOf(index);
-        if(!validationString.matches(digitCheck)) return false;
-
-        // board check
+    static boolean doTurn(String index) {
+        // get board position
         boolean turnSuccess = false;
-        int[] pos = positionLookup(index);
+        int[] pos = positionLookup(Integer.parseInt(index));
         int r = pos[0], c = pos[1];
 
         // if board position is available, mark board
+        String digitCheck = "\\d+";
         if (board[r][c].matches(digitCheck)) {
             moveCounter++; // marks where we are in the game
             board[r][c] = currentPlayer; // updates the board
@@ -61,11 +57,6 @@ class Board {
             if (isGameOver != 1) currentPlayer = currentPlayer.equals(players[0]) ? players[1] : players[0]; // updates current player
             turnSuccess = true;
         }
-
-//        if (counter == boardSize) {
-            // game is finished!
-            // replay?!
-//        }
 
         return turnSuccess; // request a different input somehow
     }

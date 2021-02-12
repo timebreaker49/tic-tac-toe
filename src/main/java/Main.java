@@ -32,17 +32,22 @@ public class Main {
                 + "\nfrom 0 to " + (board.boardSize - 1)  + " to make your mark!");
 
         while(Board.isGameOver < 1 && Board.moveCounter < board.boardSize) {
-            int selection = scanner.nextInt();
-            boolean turnSuccess = Board.doTurn(selection);
-            if(turnSuccess && Board.isGameOver == 1) { // game over!
-                System.out.println("Congratulations, we have a winner!! Good job player " + Board.currentPlayer
-                + "\n\nHere's the final board");
-                board.print();
-                break;
-            } else if (!turnSuccess) { // spot taken, try again
-                System.out.println("Sorry, that spot is taken! Please pick a different spot\n");
-            } else { // turn success and game continues
-                System.out.println("Turn successful! " + Board.currentPlayer + ", you're up next!\n");
+            String selection = scanner.nextLine();
+            String digitCheck = "\\d+";
+            if(selection.matches(digitCheck)) {
+                boolean turnSuccess = Board.doTurn(selection);
+                if(turnSuccess && Board.isGameOver == 1) { // game over!
+                    System.out.println("Congratulations, we have a winner!! Good job player "
+                    + Board.currentPlayer + "\n\nHere's the final board");
+                    board.print();
+                    break;
+                } else if (!turnSuccess) { // spot taken, try again
+                    System.out.println("Sorry, that spot is taken! Please pick a different spot\n");
+                } else { // turn success and game continues
+                    System.out.println("Turn successful! " + Board.currentPlayer + ", you're up next!\n");
+                }
+            } else {
+                System.out.println("Please select an valid number from 0-9");
             }
             board.print();
         }
