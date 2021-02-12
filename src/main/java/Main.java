@@ -35,10 +35,9 @@ public class Main {
             int selection = scanner.nextInt();
             boolean turnSuccess = Board.doTurn(selection);
             if(turnSuccess && Board.isGameOver == 1) { // game over!
-                System.out.println("Congratulations, we have a winner!!"
+                System.out.println("Congratulations, we have a winner!! Good job player " + Board.currentPlayer
                 + "\n\nHere's the final board");
                 board.print();
-                System.out.println("\\n");
                 break;
             } else if (!turnSuccess) { // spot taken, try again
                 System.out.println("Sorry, that spot is taken! Please pick a different spot\n");
