@@ -76,7 +76,7 @@ class Board {
         // check column for winner
         boolean columnWinner = checkColumn(playerString, column);
         // check diagonal for winner
-        boolean diagonalWinner = checkDiagonal(playerString, row, column);
+        boolean diagonalWinner = checkDiagonal(playerString);
 
         return (rowWinner || columnWinner || diagonalWinner);
     }
@@ -99,7 +99,7 @@ class Board {
         return true;
     }
 
-    private static boolean checkDiagonal(String playerString, int row, int column) {
+    private static boolean checkDiagonal(String playerString) {
         // check to see if it's upper left diagonal or upper right diagonal
         boolean upperLeftDiag = false;
         boolean upperRightDiag = false;
@@ -111,7 +111,7 @@ class Board {
         int counterOne = 0;
         while (i < rowLength) {
             if (board[i++][j++].equals(playerString)) counterOne++;
-            if (counterOne == rowLength - 1) upperLeftDiag = true;
+            if (counterOne == rowLength) upperLeftDiag = true;
         }
         // checks for diagonal from top right to bottom left
         i = 0;
@@ -119,7 +119,7 @@ class Board {
         int counterTwo = 0;
         while (j > 0) {
             if (board[i++][j--].equals(playerString)) counterTwo++;
-            if (counterTwo == rowLength - 1) upperRightDiag = true;
+            if (counterTwo == rowLength) upperRightDiag = true;
         }
 
         // check to see if either upperLeft or upperRight are true

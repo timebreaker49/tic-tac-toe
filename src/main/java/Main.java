@@ -38,6 +38,7 @@ public class Main {
                 System.out.println("Congratulations, we have a winner!!"
                 + "\n\nHere's the final board");
                 board.print();
+                System.out.println("\\n");
                 break;
             } else if (!turnSuccess) { // spot taken, try again
                 System.out.println("Sorry, that spot is taken! Please pick a different spot\n");
