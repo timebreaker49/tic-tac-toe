@@ -117,7 +117,7 @@ class Board {
         i = 0;
         j = rowLength - 1;
         int counterTwo = 0;
-        while (j > 0) {
+        while (j >= 0) {
             if (board[i++][j--].equals(playerString)) counterTwo++;
             if (counterTwo == rowLength) upperRightDiag = true;
         }
