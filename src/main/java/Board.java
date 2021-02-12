@@ -21,7 +21,7 @@ class Board {
 
     public Board() {
         board = new String[3][3];
-        players = new String[] {"x", "o"};
+        players = new String[] {"x", "o"}; // TODO Implement player character choice
         int positionIndex = 0;
         position = new HashMap<>();
         for (int i = 0; i < board.length; i++) {

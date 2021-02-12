@@ -5,7 +5,6 @@ import java.util.Scanner;
 public class Main {
 
     public static void main(String[] args) {
-        Board board;
         Scanner scanner = new Scanner(System.in);
 
         System.out.println("Are you ready to play?!?! Enter 'y' or 'n'");
@@ -14,6 +13,7 @@ public class Main {
             System.out.println("How bout now?!?! Enter 'y' or 'n'");
             s = scanner.nextLine();
         }
+///////// BEGIN BOARD CREATION -- TODO abstract logic in some way
         System.out.println("----------------"
                 + "\nProducing Board!..."
                 + "\n----------------");
@@ -23,20 +23,23 @@ public class Main {
         catch(InterruptedException ex) {
             Thread.currentThread().interrupt();
         }
-
-        board = new Board();
+        Board board = new Board();
         board.print();
         System.out.println("\n"
                 + "Here is our starting player!! : " + Board.currentPlayer
                 + "\nPlayer 1 (" + Board.currentPlayer + "), pick a number"
                 + "\nfrom 0 to " + (board.boardSize - 1)  + " to make your mark!");
+///////// END BOARD CREATION
 
+///////// RUN GAME -- TODO abstract logic in some way + clean up (seems messy)
         while(Board.isGameOver < 1 && Board.moveCounter < board.boardSize) {
             String selection = scanner.nextLine();
             String digitCheck = "\\d+";
             if(selection.matches(digitCheck)) {
+                // process player input
                 boolean turnSuccess = Board.doTurn(selection);
-                if(turnSuccess && Board.isGameOver == 1) { // game over!
+                // game over!
+                if(turnSuccess && Board.isGameOver == 1) {
                     System.out.println("Congratulations, we have a winner!! Good job player "
                     + Board.currentPlayer + "\n\nHere's the final board");
                     board.print();
@@ -52,7 +55,8 @@ public class Main {
             board.print();
         }
 
-        if(Board.isGameOver == 0)
+        if(Board.isGameOver == 0) // no more spots available on the board, game over
             System.out.println("It looks like we have a draw! Try playing again!");
     }
+///////// END GAME
 }
