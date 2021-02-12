@@ -6,3 +6,19 @@ As interview practice one day, an engineer asked me to design a tic-tac-toe game
 
 #### Implementation
 The MVP is a command line game that assumes two players are sitting in front of the same computer~ 
+
+#### How it's played
+*First, run the program! When the game starts up:*
+- Players are prompted to begin the game
+- The first player to go is chosen by the computer
+- During their turn, players select a position on the board by selecting a number representing an open spot
+    - If a player chooses an occupied spot, they're once again prompted to select a different spot 
+- After each turn, a check is performed to see if there's a winner~
+- If all spots are filled on the board and neither player has 3 in a row, the game is a draw
+
+#### What I want to implement beyond this
+- Allow users to select the character string they'd like to use for the game
+- Create replay logic
+- Clear the terminal after each turn
+- Vary size of the board
+- Introduce 1 player mode, where you play against a computer
