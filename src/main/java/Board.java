@@ -58,7 +58,7 @@ class Board {
             board[r][c] = currentPlayer; // updates the board
             boolean winCheck = checkWinner(currentPlayer, r, c);
             if(winCheck) isGameOver = 1;
-            currentPlayer = currentPlayer.equals(players[0]) ? players[1] : players[0]; // updates current player
+            if (isGameOver != 1) currentPlayer = currentPlayer.equals(players[0]) ? players[1] : players[0]; // updates current player
             turnSuccess = true;
         }
 
