@@ -3,7 +3,7 @@ package main.java;
 import java.util.Scanner;
 
 public class Game {
-    static Board setupGame() {
+    static Board setUpGame() {
         Scanner scanner = new Scanner(System.in);
 
         System.out.println("Are you ready to play?!?! Enter 'y' or 'n'");
@@ -52,7 +52,7 @@ public class Game {
                     System.out.println("Turn successful! " + Board.currentPlayer + ", you're up next!\n");
                 }
             } else {
-                System.out.println("Please select an valid number from 0-9");
+                System.out.println("Please select an valid number from 0-8");
             }
             gameBoard.print();
         }
@@ -61,23 +61,30 @@ public class Game {
     }
 
     static boolean doTurn(String index) {
-        // get board position
-        boolean turnSuccess = false;
+        // get board position, mark board (if position available)
         int[] pos = Board.positionLookup(Integer.parseInt(index));
-        int r = pos[0], c = pos[1];
+        return markPosition(pos);
+    }
 
-        // if board position is available, mark board
+    static boolean markPosition(int [] pos) {
+    // checks valid input, updates game board, checks winner
+        boolean turnSuccess = false;
+        int r = pos[0], c = pos[1];
         String digitCheck = "\\d+";
         if (Board.board[r][c].matches(digitCheck)) {
-            Board.moveCounter++; // marks where we are in the game
             Board.board[r][c] = Board.currentPlayer; // updates the board
+            Board.moveCounter++;
             boolean winCheck = checkWinner(Board.currentPlayer, r, c);
             if(winCheck) Board.isGameOver = 1;
-            if (Board.isGameOver != 1) Board.currentPlayer = Board.currentPlayer.equals(Board.players[0]) ? Board.players[1] : Board.players[0]; // updates current player
+            setNextPlayer();
             turnSuccess = true;
         }
+        return turnSuccess;
+    }
 
-        return turnSuccess; // request a different input somehow
+    static String setNextPlayer() {
+        return Board.currentPlayer = Board.currentPlayer.equals(Board.players[0])
+                ? Board.players[1] : Board.players[0]; // updates current player
     }
 
     private static boolean checkWinner(String playerString, int row, int column) {
