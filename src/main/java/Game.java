@@ -22,6 +22,11 @@ public class Game {
         catch(InterruptedException ex) {
             Thread.currentThread().interrupt();
         }
+
+        return createBoard();
+    }
+
+    static Board createBoard() {
         Board board = new Board();
         board.print();
         System.out.println("\n"
@@ -37,7 +42,7 @@ public class Game {
             String selection = scanner.nextLine();
             String digitCheck = "\\d+";
             if (selection.matches(digitCheck)
-                    && Board.position.containsKey(Integer.parseInt(selection))) {
+                && Board.position.containsKey(Integer.parseInt(selection))) {
                 // process player input
                 boolean turnSuccess = doTurn(selection);
                 // game over!
@@ -45,7 +50,13 @@ public class Game {
                     System.out.println("Congratulations, we have a winner!! Good job player "
                             + Board.currentPlayer + "\n\nHere's the final board");
                     gameBoard.print();
-                    break;
+                    System.out.println("Would you like to play again? Please input 'y' or 'n'");
+                    if (scanner.nextLine().equals("y")) {
+                        gameBoard = createBoard();
+                        System.out.println("Board moves~: " + Board.moveCounter);
+                    } else {
+                        break;
+                    }
                 } else if (!turnSuccess) { // spot taken, try again
                     System.out.println("Sorry, that spot is taken! Please pick a different spot\n");
                 } else { // turn success and game continues
@@ -76,18 +87,18 @@ public class Game {
             Board.moveCounter++;
             boolean winCheck = checkWinner(Board.currentPlayer, r, c);
             if(winCheck) Board.isGameOver = 1;
-            setNextPlayer();
+            setPlayer();
             turnSuccess = true;
         }
         return turnSuccess;
     }
 
-    static String setNextPlayer() {
-        return Board.currentPlayer = Board.currentPlayer.equals(Board.players[0])
-                ? Board.players[1] : Board.players[0]; // updates current player
+    static void setPlayer() {
+        Board.currentPlayer = Board.currentPlayer.equals(Board.players[0])
+            ? Board.players[1] : Board.players[0]; // updates current player
     }
 
-    private static boolean checkWinner(String playerString, int row, int column) {
+    static boolean checkWinner(String playerString, int row, int column) {
         // check row for winner
         boolean rowWinner = checkRow(playerString, row);
         // check column for winner
@@ -98,7 +109,7 @@ public class Game {
         return (rowWinner || columnWinner || diagonalWinner);
     }
 
-    private static boolean checkRow(String playerString, int row) {
+    static boolean checkRow(String playerString, int row) {
         int j = 0;
         while (j < Board.board[0].length) {
             String checkedValue = Board.board[row][j++];
@@ -107,7 +118,7 @@ public class Game {
         return true;
     }
 
-    private static boolean checkColumn(String playerString, int column) {
+    static boolean checkColumn(String playerString, int column) {
         int i = 0;
         while (i < Board.board.length) {
             String checkedValue = Board.board[i++][column];
@@ -116,7 +127,7 @@ public class Game {
         return true;
     }
 
-    private static boolean checkDiagonal(String playerString) {
+    static boolean checkDiagonal(String playerString) {
         // check to see if it's upper left diagonal or upper right diagonal
         boolean upperLeftDiag = false;
         boolean upperRightDiag = false;
@@ -141,5 +152,11 @@ public class Game {
 
         // check to see if either upperLeft or upperRight are true
         return (upperLeftDiag || upperRightDiag);
+    }
+
+    static boolean playAgain() {
+        System.out.println("Would you like to play again?");
+
+        return false;
     }
 }
