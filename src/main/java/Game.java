@@ -3,16 +3,18 @@ package main.java;
 import java.util.Scanner;
 
 public class Game {
-    static Board setUpGame() {
+    static Board initializeGame() {
         Scanner scanner = new Scanner(System.in);
-
         System.out.println("Are you ready to play?!?! Enter 'y' or 'n'");
         String s = scanner.nextLine();
         while(!s.equals("y")) {
             System.out.println("How bout now?!?! Enter 'y' or 'n'");
             s = scanner.nextLine();
         }
+        return createBoard();
+    }
 
+    static Board createBoard() {
         System.out.println("----------------"
                 + "\nProducing Board!..."
                 + "\n----------------");
@@ -22,11 +24,6 @@ public class Game {
         catch(InterruptedException ex) {
             Thread.currentThread().interrupt();
         }
-
-        return createBoard();
-    }
-
-    static Board createBoard() {
         Board board = new Board();
         board.print();
         System.out.println("\n"
@@ -44,7 +41,7 @@ public class Game {
             if (selection.matches(digitCheck)
                 && Board.position.containsKey(Integer.parseInt(selection))) {
                 // process player input
-                boolean turnSuccess = doTurn(selection);
+                boolean turnSuccess = markBoard(selection);
                 // game over!
                 if (turnSuccess && Board.isGameOver == 1) {
                     System.out.println("Congratulations, we have a winner!! Good job player "
@@ -71,7 +68,7 @@ public class Game {
             System.out.println("It looks like we have a draw! Try playing again!");
     }
 
-    static boolean doTurn(String index) {
+    static boolean markBoard(String index) {
         // get board position, mark board (if position available)
         int[] pos = Board.positionLookup(Integer.parseInt(index));
         return markPosition(pos);
@@ -152,11 +149,5 @@ public class Game {
 
         // check to see if either upperLeft or upperRight are true
         return (upperLeftDiag || upperRightDiag);
-    }
-
-    static boolean playAgain() {
-        System.out.println("Would you like to play again?");
-
-        return false;
     }
 }
