@@ -33,19 +33,23 @@ public class Game {
         return board;
     }
 
+    static void runGame(Board gameBoard) {
+        while (Board.isGameOver < 1 && Board.moveCounter < gameBoard.boardSize) {
+            processTurn(gameBoard);
+        }
+    }
+
     static void processTurn(Board gameBoard) {
         Scanner scanner = new Scanner(System.in);
         String selection = scanner.nextLine();
         String digitCheck = "\\d+";
+        // if valid digit, see if it can be placed on the board
         if (selection.matches(digitCheck) && Board.position.containsKey(Integer.parseInt(selection))) {
             boolean turnSuccess = markBoard(selection);
             if (turnSuccess && Board.isGameOver == 1) {
                 System.out.println("Congratulations, we have a winner!! Good job player " + Board.currentPlayer + "\n\nHere's the final board");
                 gameBoard.print();
-                boolean replayGame = handleReplay(scanner);
-                if (replayGame) {
-                    gameBoard = createBoard();
-                }
+                gameBoard= handleReplay(scanner, gameBoard);
             } else if (!turnSuccess) { // spot taken, try again
                 System.out.println("Sorry, that spot is taken! Please pick a different spot\n");
             } else { // turn success and game continues
@@ -54,22 +58,21 @@ public class Game {
             if(Board.isGameOver != 1 && Board.moveCounter > 0) { // prints the game board while game is not over
                 gameBoard.print();
             }
-        } else {
+        } else { // invalid entry
             System.out.println("Please select an valid number from 0-8");
         }
-    }
 
-    private static Boolean handleReplay(Scanner scanner) {
-        System.out.println("Would you like to play again? Please input 'y' or 'n'");
-        return scanner.nextLine().equals("y");
-    }
-
-    static void runGame(Board gameBoard) {
-        while (Board.isGameOver < 1 && Board.moveCounter < gameBoard.boardSize) {
-            processTurn(gameBoard);
+        if (Board.moveCounter == gameBoard.boardSize) { // if the board is full and there's no winner
+            handleReplay(scanner, gameBoard);
         }
-        if(Board.isGameOver == 0) // no more spots available on the board, game over
-            System.out.println("It looks like we have a draw! Try playing again!");
+    }
+
+    private static Board handleReplay(Scanner scanner, Board gameBoard) {
+        System.out.println("Would you like to play again? Please input 'y' or 'n'");
+        if (scanner.nextLine().equals("y")) {
+            gameBoard = createBoard();
+        }
+        return gameBoard;
     }
 
     static boolean markBoard(String index) {

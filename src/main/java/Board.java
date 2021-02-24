@@ -2,15 +2,6 @@ package main.java;
 
 import java.util.*;
 
-// TODO Move this to game logic or get rid of it altogether
-/*
- * [
- * [(0, 0), (0, 1), (0, 2)],
- * [(1, 0), (1, 1), (1, 2)],
- * [(2, 0), (2, 1), (2, 2)]
- * ]
- * */
-
 class Board {
     static String[][] board; // in the future, would like user to be able to create variable sized board
     static int moveCounter;
@@ -31,7 +22,6 @@ class Board {
                 board[i][j] = String.valueOf(positionIndex++);
             }
         }
-
         moveCounter = 0;
         boardSize = board.length * board[0].length;
         currentPlayer = Math.random() < 0.5 ? players[0] : players[1];
