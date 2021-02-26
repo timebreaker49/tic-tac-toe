@@ -85,7 +85,7 @@ public class Game {
             System.out.println("Please select an valid number from 0-8");
         }
 
-        if (Board.moveCounter == gameBoard.boardSize) { // if the board is full and there's no winner
+        if (Board.moveCounter == gameBoard.boardSize && Board.isGameOver != 1) { // if the board is full and there's no winner
             handleReplay(scanner, gameBoard);
         }
     }
@@ -114,7 +114,7 @@ public class Game {
             Board.moveCounter++;
             boolean winCheck = checkWinner(Board.currentPlayer, r, c);
             if(winCheck) Board.isGameOver = 1;
-            setPlayer();
+            if(Board.isGameOver != 1) setPlayer();
             turnSuccess = true;
         }
         return turnSuccess;
