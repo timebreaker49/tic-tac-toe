@@ -1,5 +1,8 @@
 package main.java;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 import java.util.Scanner;
 
 public class Game {
@@ -14,7 +17,28 @@ public class Game {
         return createBoard();
     }
 
+    private static String[] selectPlayerNames() {
+        Scanner scanner = new Scanner(System.in);
+
+        System.out.println("Player one, input the name you'd like for your character: ");
+        String playerOne = scanner.nextLine();
+        System.out.println("Player one(aka " + playerOne + "), I hope you like that name, because you're stuck with it");
+        System.out.println("Player two, you're up, select your name: ");
+        String playerTwo = scanner.nextLine();
+
+        return new String[] {playerOne, playerTwo};
+    }
+
     static Board createBoard() {
+        Scanner scanner = new Scanner(System.in);
+        System.out.println("Would you like to select your player character? Enter 'y' or 'n'");
+        String wantsToSelectPlayerNames = scanner.nextLine();
+        List<String> yOrN = new ArrayList<>(Arrays.asList("y", "n"));
+        while(!yOrN.contains(wantsToSelectPlayerNames)) {
+            System.out.println("Please enter 'y' or 'n'");
+            wantsToSelectPlayerNames = scanner.nextLine();
+        }
+        Board board = (wantsToSelectPlayerNames.equals("y")) ? new Board(selectPlayerNames()) : new Board();
         System.out.println("----------------"
                 + "\nProducing Board!..."
                 + "\n----------------");
@@ -24,7 +48,6 @@ public class Game {
         catch(InterruptedException ex) {
             Thread.currentThread().interrupt();
         }
-        Board board = new Board();
         board.print();
         System.out.println("\n"
                 + "Here is our starting player!! : " + Board.currentPlayer
