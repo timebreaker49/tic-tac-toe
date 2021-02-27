@@ -99,18 +99,13 @@ public class Game {
     }
 
     static boolean markBoard(String index) {
-        // get board position, mark board (if position available)
         int[] pos = Board.positionLookup(Integer.parseInt(index));
-        return markPosition(pos);
-    }
-
-    static boolean markPosition(int [] pos) {
-    // checks valid input, updates game board, checks winner
         boolean turnSuccess = false;
         int r = pos[0], c = pos[1];
         String digitCheck = "\\d+";
         if (Board.board[r][c].trim().matches(digitCheck)) {
-            Board.board[r][c] = (Board.currentPlayer.equals(Board.players[Board.longerString]) ? Board.currentPlayer : Board.adjustSpaces(Board.longerString, Board.currentPlayer)); // updates the board
+            Board.board[r][c] = (Board.currentPlayer.equals(Board.players[Board.longerString])
+                    ? Board.currentPlayer : Board.adjustSpaces(Board.longerString, Board.currentPlayer));
             Board.moveCounter++;
             boolean winCheck = checkWinner(Board.currentPlayer, r, c);
             if(winCheck) Board.isGameOver = 1;

@@ -18,7 +18,8 @@ The MVP is a command line game that assumes two players are sitting in front of 
 
 #### What I want to implement beyond this
 - Allow users to select the character string they'd like to use for the game
-- Create replay logic
+- ~~Create replay logic~~
 - Clear the terminal after each turn
 - Vary size of the board
 - Introduce 1 player mode, where you play against a computer
+- Best 'x' out of 'x' games (ex. keeping track of best 2 of 3)
