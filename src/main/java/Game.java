@@ -91,7 +91,7 @@ public class Game {
     }
 
     private static Board handleReplay(Scanner scanner, Board gameBoard) {
-        System.out.println("Would you like to play again? Please input 'y' or 'n'");
+        System.out.println("\nWould you like to play again? Please input 'y' or 'n'");
         if (scanner.nextLine().equals("y")) {
             gameBoard = createBoard();
         }
@@ -109,8 +109,8 @@ public class Game {
         boolean turnSuccess = false;
         int r = pos[0], c = pos[1];
         String digitCheck = "\\d+";
-        if (Board.board[r][c].matches(digitCheck)) {
-            Board.board[r][c] = Board.currentPlayer; // updates the board
+        if (Board.board[r][c].trim().matches(digitCheck)) {
+            Board.board[r][c] = (Board.currentPlayer.equals(Board.players[Board.longerString]) ? Board.currentPlayer : Board.adjustSpaces(Board.longerString, Board.currentPlayer)); // updates the board
             Board.moveCounter++;
             boolean winCheck = checkWinner(Board.currentPlayer, r, c);
             if(winCheck) Board.isGameOver = 1;

@@ -10,6 +10,7 @@ class Board {
     static String[] players;
     static int isGameOver;
     static Map<Integer, int[]> position;
+    static int longerString;
 
     public Board() { // traditional board, x and o
         board = new String[3][3];
@@ -33,10 +34,11 @@ class Board {
         players = new String[] {names[0], names[1]};
         int positionIndex = 0;
         position = new HashMap<>();
+        longerString = (players[0].length() > players[1].length()) ? 0 : 1;
         for (int i = 0; i < board.length; i++) {
             for (int j = 0; j < board[0].length; j++) {
                 position.put(positionIndex, new int[] {i, j});
-                board[i][j] = String.valueOf(positionIndex++);
+                board[i][j] = adjustSpaces(longerString, String.valueOf(positionIndex++));
             }
         }
         moveCounter = 0;
@@ -49,7 +51,29 @@ class Board {
         return position.get(key);
     }
 
-    public void print() { // TODO add padding to make board print evenly (based on length of player character string)
+    static String adjustSpaces(int longerPlayerString, String entry) {
+        int longestString = players[longerPlayerString].length();
+        int currentEntryLength = entry.length();
+
+        int leftHalfSpaces = (longestString - currentEntryLength) / 2;
+        int rightHalfSpaces = longestString - currentEntryLength - leftHalfSpaces;
+
+        String leftPrintedSpaces = printSpaces(leftHalfSpaces);
+        String rightPrintedSpaces = printSpaces(rightHalfSpaces);
+        return leftPrintedSpaces + entry + rightPrintedSpaces;
+    }
+
+    private static String printSpaces(int numSpaces) {
+        int spaceCounter = 0;
+        StringBuilder spaces = new StringBuilder();
+        while(spaceCounter < numSpaces) {
+            spaces.append(" ");
+            spaceCounter++;
+        }
+        return spaces.toString();
+    }
+
+    public void print() {
         for (String[] row : board) {
             System.out.println(Arrays.toString(row));
         }
