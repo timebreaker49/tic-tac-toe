@@ -17,7 +17,7 @@ The MVP is a command line game that assumes two players are sitting in front of 
 - If all spots are filled on the board and neither player has 3 in a row, the game is a draw
 
 #### What I want to implement beyond this
-- Allow users to select the character string they'd like to use for the game
+- Allow users to select the character string they'd like to use for the game (In progress)
 - ~~Create replay logic~~
 - Clear the terminal after each turn
 - Vary size of the board
