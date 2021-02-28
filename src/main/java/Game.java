@@ -14,31 +14,31 @@ public class Game {
             System.out.println("How bout now?!?! Enter 'y' or 'n'");
             s = scanner.nextLine();
         }
+
         return createBoard();
     }
 
-    private static String[] selectPlayerNames() {
-        Scanner scanner = new Scanner(System.in);
-
-        System.out.println("Player one, input the name you'd like for your character: ");
-        String playerOne = scanner.nextLine();
-        System.out.println("Player one(aka " + playerOne + "), I hope you like that name, because you're stuck with it");
-        System.out.println("Player two, you're up, select your name: ");
-        String playerTwo = scanner.nextLine();
-
-        return new String[] {playerOne, playerTwo};
-    }
-
     static Board createBoard() {
-        Scanner scanner = new Scanner(System.in);
+        List<String> yOrN = new ArrayList<>(Arrays.asList("y", "n"));
+
+        System.out.println("Would you like to select the size of the board? 'y' or n'");
+        String wantsToSelectBoardSize = scanner.nextLine();
+
+        while(!yOrN.contains(wantsToSelectBoardSize)) {
+            System.out.println("Please enter 'y' or 'n'");
+            wantsToSelectBoardSize = scanner.nextLine();
+        }
+
+        int sizeOfBoard = (!wantsToSelectBoardSize.equals("y")) ? 3 : selectBoardSize();
+
         System.out.println("Would you like to select your player character? Enter 'y' or 'n'");
         String wantsToSelectPlayerNames = scanner.nextLine();
-        List<String> yOrN = new ArrayList<>(Arrays.asList("y", "n"));
+
         while(!yOrN.contains(wantsToSelectPlayerNames)) {
             System.out.println("Please enter 'y' or 'n'");
             wantsToSelectPlayerNames = scanner.nextLine();
         }
-        Board board = (wantsToSelectPlayerNames.equals("y")) ? new Board(selectPlayerNames()) : new Board();
+        Board board = (wantsToSelectPlayerNames.equals("y")) ? new Board(selectPlayerNames(), sizeOfBoard) : new Board();
         System.out.println("----------------"
                 + "\nProducing Board!..."
                 + "\n----------------");
@@ -54,6 +54,27 @@ public class Game {
                 + "\nPlayer 1 (" + Board.currentPlayer + "), pick a number"
                 + "\nfrom 0 to " + (board.boardSize - 1)  + " to make your mark!");
         return board;
+    }
+
+    private static String[] selectPlayerNames() {
+        System.out.println("Player one, input the name you'd like for your character: ");
+        String playerOne = scanner.nextLine();
+        System.out.println("Player one(aka " + playerOne + "), I hope you like that name, because you're stuck with it");
+        System.out.println("Player two, you're up, select your name: ");
+        String playerTwo = scanner.nextLine();
+
+        return new String[] {playerOne, playerTwo};
+    }
+
+    private static int selectBoardSize() {
+        System.out.println("Select board size by choosing a number 3 to 10");
+        String boardSize = scanner.nextLine();
+        String digitCheck = "\\d+";
+        while(!boardSize.matches(digitCheck) && Integer.parseInt(boardSize) > 3) {
+            System.out.println("Please select board size by choosing a number 3 to 10");
+            boardSize = scanner.nextLine();
+        }
+        return Integer.parseInt(boardSize);
     }
 
     static void runGame(Board gameBoard) {
@@ -82,7 +103,7 @@ public class Game {
                 gameBoard.print();
             }
         } else { // invalid entry
-            System.out.println("Please select an valid number from 0-8");
+            System.out.println("Please select an valid number from 0-" + gameBoard.boardSize);
         }
 
         if (Board.moveCounter == gameBoard.boardSize && Board.isGameOver != 1) { // if the board is full and there's no winner
