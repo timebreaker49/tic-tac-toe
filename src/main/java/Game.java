@@ -156,7 +156,7 @@ public class Game {
     static boolean checkRow(String playerString, int row) {
         int j = 0;
         while (j < Board.board[0].length) {
-            String checkedValue = Board.board[row][j++];
+            String checkedValue = Board.board[row][j++].trim();
             if (!checkedValue.equals(playerString)) return false;
         }
         return true;
@@ -165,7 +165,7 @@ public class Game {
     static boolean checkColumn(String playerString, int column) {
         int i = 0;
         while (i < Board.board.length) {
-            String checkedValue = Board.board[i++][column];
+            String checkedValue = Board.board[i++][column].trim();
             if (!checkedValue.equals(playerString)) return false;
         }
         return true;
@@ -182,7 +182,7 @@ public class Game {
         int j = 0;
         int counterOne = 0;
         while (i < rowLength) {
-            if (Board.board[i++][j++].equals(playerString)) counterOne++;
+            if (Board.board[i++][j++].trim().equals(playerString)) counterOne++;
             if (counterOne == rowLength) upperLeftDiag = true;
         }
         // checks for diagonal from top right to bottom left
@@ -190,7 +190,7 @@ public class Game {
         j = rowLength - 1;
         int counterTwo = 0;
         while (j >= 0) {
-            if (Board.board[i++][j--].equals(playerString)) counterTwo++;
+            if (Board.board[i++][j--].trim().equals(playerString)) counterTwo++;
             if (counterTwo == rowLength) upperRightDiag = true;
         }
 
