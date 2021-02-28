@@ -40,7 +40,7 @@ public class Game {
             System.out.println("Please enter 'y' or 'n'");
             wantsToSelectPlayerNames = scanner.nextLine();
         }
-        Board board = (wantsToSelectPlayerNames.equals("y")) ? new Board(selectPlayerNames(), sizeOfBoard) : new Board();
+        Board board = (wantsToSelectPlayerNames.equals("y")) ? new Board(selectPlayerNames(), sizeOfBoard) : new Board(sizeOfBoard);
         System.out.println("----------------"
                 + "\nProducing Board!..."
                 + "\n----------------");

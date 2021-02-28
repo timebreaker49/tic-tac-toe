@@ -12,23 +12,6 @@ class Board {
     static Map<Integer, int[]> position;
     static int longerString;
 
-    public Board() { // traditional board, x and o
-        board = new String[3][3];
-        players = new String[] {"x", "o"};
-        int positionIndex = 0;
-        position = new HashMap<>();
-        for (int i = 0; i < board.length; i++) {
-            for (int j = 0; j < board[0].length; j++) {
-                position.put(positionIndex, new int[] {i, j});
-                board[i][j] = String.valueOf(positionIndex++);
-            }
-        }
-        moveCounter = 0;
-        boardSize = board.length * board[0].length;
-        currentPlayer = Math.random() < 0.5 ? players[0] : players[1];
-        isGameOver = 0;
-    }
-
     public Board(int size) { // traditional board, x and o
         board = new String[size][size];
         players = new String[] {"x", "o"};
