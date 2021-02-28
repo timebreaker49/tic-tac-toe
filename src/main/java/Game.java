@@ -6,8 +6,10 @@ import java.util.List;
 import java.util.Scanner;
 
 public class Game {
+    static Scanner scanner;
+
     static Board initializeGame() {
-        Scanner scanner = new Scanner(System.in);
+        scanner = new Scanner(System.in);
         System.out.println("Are you ready to play?!?! Enter 'y' or 'n'");
         String s = scanner.nextLine();
         while(!s.equals("y")) {
@@ -84,7 +86,6 @@ public class Game {
     }
 
     static void processTurn(Board gameBoard) {
-        Scanner scanner = new Scanner(System.in);
         String selection = scanner.nextLine();
         String digitCheck = "\\d+";
         // if valid digit, see if it can be placed on the board
@@ -93,7 +94,7 @@ public class Game {
             if (turnSuccess && Board.isGameOver == 1) {
                 System.out.println("Congratulations, we have a winner!! Good job player " + Board.currentPlayer + "\n\nHere's the final board");
                 gameBoard.print();
-                gameBoard= handleReplay(scanner, gameBoard);
+                gameBoard= handleReplay(gameBoard);
             } else if (!turnSuccess) { // spot taken, try again
                 System.out.println("Sorry, that spot is taken! Please pick a different spot\n");
             } else { // turn success and game continues
@@ -107,11 +108,11 @@ public class Game {
         }
 
         if (Board.moveCounter == gameBoard.boardSize && Board.isGameOver != 1) { // if the board is full and there's no winner
-            handleReplay(scanner, gameBoard);
+            handleReplay(gameBoard);
         }
     }
 
-    private static Board handleReplay(Scanner scanner, Board gameBoard) {
+    private static Board handleReplay(Board gameBoard) {
         System.out.println("\nWould you like to play again? Please input 'y' or 'n'");
         if (scanner.nextLine().equals("y")) {
             gameBoard = createBoard();
