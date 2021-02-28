@@ -11,35 +11,20 @@ public class Game {
     static Board initializeGame() {
         scanner = new Scanner(System.in);
         System.out.println("Are you ready to play?!?! Enter 'y' or 'n'");
-        String s = scanner.nextLine();
-        while(!s.equals("y")) {
-            System.out.println("How bout now?!?! Enter 'y' or 'n'");
-            s = scanner.nextLine();
-        }
-
+        validateYOrN(scanner.nextLine());
         return createBoard();
     }
 
     static Board createBoard() {
-        List<String> yOrN = new ArrayList<>(Arrays.asList("y", "n"));
 
         System.out.println("Would you like to select the size of the board? 'y' or n'");
-        String wantsToSelectBoardSize = scanner.nextLine();
-
-        while(!yOrN.contains(wantsToSelectBoardSize)) {
-            System.out.println("Please enter 'y' or 'n'");
-            wantsToSelectBoardSize = scanner.nextLine();
-        }
+        String wantsToSelectBoardSize = validateYOrN(scanner.nextLine());
 
         int sizeOfBoard = (!wantsToSelectBoardSize.equals("y")) ? 3 : selectBoardSize();
 
         System.out.println("Would you like to select your player character? Enter 'y' or 'n'");
-        String wantsToSelectPlayerNames = scanner.nextLine();
+        String wantsToSelectPlayerNames = validateYOrN(scanner.nextLine());
 
-        while(!yOrN.contains(wantsToSelectPlayerNames)) {
-            System.out.println("Please enter 'y' or 'n'");
-            wantsToSelectPlayerNames = scanner.nextLine();
-        }
         Board board = (wantsToSelectPlayerNames.equals("y")) ? new Board(selectPlayerNames(), sizeOfBoard) : new Board(sizeOfBoard);
         System.out.println("----------------"
                 + "\nProducing Board!..."
@@ -114,7 +99,7 @@ public class Game {
 
     private static Board handleReplay(Board gameBoard) {
         System.out.println("\nWould you like to play again? Please input 'y' or 'n'");
-        if (scanner.nextLine().equals("y")) {
+        if (validateYOrN(scanner.nextLine()).equals("y")) {
             gameBoard = createBoard();
         }
         return gameBoard;
@@ -196,5 +181,14 @@ public class Game {
 
         // check to see if either upperLeft or upperRight are true
         return (upperLeftDiag || upperRightDiag);
+    }
+
+    private static String validateYOrN(String answer) {
+        List<String> yOrN = new ArrayList<>(Arrays.asList("y", "n"));
+        while(!yOrN.contains(answer)) {
+            System.out.println("Please enter 'y' or 'n'");
+            answer = scanner.nextLine();
+        }
+        return answer;
     }
 }
