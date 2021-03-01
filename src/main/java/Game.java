@@ -8,6 +8,8 @@ import java.util.Scanner;
 public class Game {
     Scanner scanner;
     Board board;
+    int numOfGames;
+    int[] playerWins;
 
     public void initializeGame() {
         scanner = new Scanner(System.in);
@@ -17,6 +19,7 @@ public class Game {
             System.out.println("How about now? Please enter 'y' or 'n'");
             s = scanner.nextLine();
         }
+        selectNumberOfGames();
         createBoard();
     }
 
@@ -68,6 +71,18 @@ public class Game {
         return Integer.parseInt(boardSize);
     }
 
+    private void selectNumberOfGames() {
+        System.out.println("Please enter how many games you'd like to play (by choosing a number 1 and 10)");
+        String numGames = scanner.nextLine();
+        String digitCheck = "\\d+";
+        while(!numGames.matches(digitCheck)) {
+            System.out.println("Please select board size by choosing a number 1 to 10");
+            numGames = scanner.nextLine();
+        }
+        numOfGames = Integer.parseInt(numGames);
+        playerWins = new int[] {0,0};
+    }
+
     public void runGame() {
         while (board.isGameOver < 1 && board.moveCounter < board.boardSize) {
             processTurn();
@@ -103,9 +118,22 @@ public class Game {
     }
 
     private void handleReplay() {
-        System.out.println("\nWould you like to play again? Please input 'y' or 'n'");
-        if (validateYOrN(scanner.nextLine()).equals("y")) {
+        if (board.currentPlayer.equals(board.players[0])) {
+            playerWins[0]++;
+        } else {
+            playerWins[1]++;
+        }
+        int numGamesForWin = numOfGames / 2 + 1;
+        if(playerWins[0] == numGamesForWin || playerWins[1] == numGamesForWin) {
+            System.out.println("the game is officially over! pack up and go home");
+        } else if(numOfGames > 1) {
+            System.out.println("Ready for the next round?!?!");
             createBoard();
+        } else {
+            System.out.println("\nWould you like to play again? Please input 'y' or 'n'");
+            if (validateYOrN(scanner.nextLine()).equals("y")) {
+                createBoard();
+            }
         }
     }
 
