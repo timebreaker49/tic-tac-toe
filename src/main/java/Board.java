@@ -3,7 +3,7 @@ package main.java;
 import java.util.*;
 
 class Board {
-    static String[][] board; // in the future, would like user to be able to create variable sized board
+    String[][] board;
     static int moveCounter;
     int boardSize;
     static String currentPlayer;

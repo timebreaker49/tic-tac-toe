@@ -7,6 +7,7 @@ import java.util.Scanner;
 
 public class Game {
     static Scanner scanner;
+    Board board;
 
     static Board initializeGame() {
         scanner = new Scanner(System.in);
@@ -64,13 +65,13 @@ public class Game {
         return Integer.parseInt(boardSize);
     }
 
-    static void runGame(Board gameBoard) {
+    void runGame(Board gameBoard) {
         while (Board.isGameOver < 1 && Board.moveCounter < gameBoard.boardSize) {
             processTurn(gameBoard);
         }
     }
 
-    static void processTurn(Board gameBoard) {
+    void processTurn(Board gameBoard) {
         String selection = scanner.nextLine();
         String digitCheck = "\\d+";
         // if valid digit, see if it can be placed on the board
@@ -105,13 +106,13 @@ public class Game {
         return gameBoard;
     }
 
-    static boolean markBoard(String index) {
+    boolean markBoard(String index) {
         int[] pos = Board.positionLookup(Integer.parseInt(index));
         boolean turnSuccess = false;
         int r = pos[0], c = pos[1];
         String digitCheck = "\\d+";
-        if (Board.board[r][c].trim().matches(digitCheck)) {
-            Board.board[r][c] = (Board.currentPlayer.equals(Board.players[Board.longerString])
+        if (board.board[r][c].trim().matches(digitCheck)) {
+            board.board[r][c] = (Board.currentPlayer.equals(Board.players[Board.longerString])
                     ? Board.currentPlayer : Board.adjustSpaces(Board.longerString, Board.currentPlayer));
             Board.moveCounter++;
             boolean winCheck = checkWinner(Board.currentPlayer, r, c);
@@ -127,7 +128,7 @@ public class Game {
             ? Board.players[1] : Board.players[0]; // updates current player
     }
 
-    static boolean checkWinner(String playerString, int row, int column) {
+    boolean checkWinner(String playerString, int row, int column) {
         // check row for winner
         boolean rowWinner = checkRow(playerString, row);
         // check column for winner
@@ -138,36 +139,36 @@ public class Game {
         return (rowWinner || columnWinner || diagonalWinner);
     }
 
-    static boolean checkRow(String playerString, int row) {
+    boolean checkRow(String playerString, int row) {
         int j = 0;
-        while (j < Board.board[0].length) {
-            String checkedValue = Board.board[row][j++].trim();
+        while (j < board.board[0].length) {
+            String checkedValue = board.board[row][j++].trim();
             if (!checkedValue.equals(playerString)) return false;
         }
         return true;
     }
 
-    static boolean checkColumn(String playerString, int column) {
+    boolean checkColumn(String playerString, int column) {
         int i = 0;
-        while (i < Board.board.length) {
-            String checkedValue = Board.board[i++][column].trim();
+        while (i < board.board.length) {
+            String checkedValue = board.board[i++][column].trim();
             if (!checkedValue.equals(playerString)) return false;
         }
         return true;
     }
 
-    static boolean checkDiagonal(String playerString) {
+    boolean checkDiagonal(String playerString) {
         // check to see if it's upper left diagonal or upper right diagonal
         boolean upperLeftDiag = false;
         boolean upperRightDiag = false;
-        int rowLength = Board.board[0].length;
+        int rowLength = board.board[0].length;
 
         // checks for diagonal from top left to bottom right
         int i = 0;
         int j = 0;
         int counterOne = 0;
         while (i < rowLength) {
-            if (Board.board[i++][j++].trim().equals(playerString)) counterOne++;
+            if (board.board[i++][j++].trim().equals(playerString)) counterOne++;
             if (counterOne == rowLength) upperLeftDiag = true;
         }
         // checks for diagonal from top right to bottom left
@@ -175,7 +176,7 @@ public class Game {
         j = rowLength - 1;
         int counterTwo = 0;
         while (j >= 0) {
-            if (Board.board[i++][j--].trim().equals(playerString)) counterTwo++;
+            if (board.board[i++][j--].trim().equals(playerString)) counterTwo++;
             if (counterTwo == rowLength) upperRightDiag = true;
         }
 
