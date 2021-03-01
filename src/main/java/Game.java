@@ -66,7 +66,7 @@ public class Game {
     }
 
     void runGame(Board gameBoard) {
-        while (Board.isGameOver < 1 && Board.moveCounter < gameBoard.boardSize) {
+        while (board.isGameOver < 1 && Board.moveCounter < gameBoard.boardSize) {
             processTurn(gameBoard);
         }
     }
@@ -77,7 +77,7 @@ public class Game {
         // if valid digit, see if it can be placed on the board
         if (selection.matches(digitCheck) && Board.position.containsKey(Integer.parseInt(selection))) {
             boolean turnSuccess = markBoard(selection);
-            if (turnSuccess && Board.isGameOver == 1) {
+            if (turnSuccess && board.isGameOver == 1) {
                 System.out.println("Congratulations, we have a winner!! Good job player " + Board.currentPlayer + "\n\nHere's the final board");
                 gameBoard.print();
                 gameBoard= handleReplay(gameBoard);
@@ -86,14 +86,14 @@ public class Game {
             } else { // turn success and game continues
                 System.out.println("Turn successful! " + Board.currentPlayer + ", you're up next!\n");
             }
-            if(Board.isGameOver != 1 && Board.moveCounter > 0) { // prints the game board while game is not over
+            if(board.isGameOver != 1 && Board.moveCounter > 0) { // prints the game board while game is not over
                 gameBoard.print();
             }
         } else { // invalid entry
             System.out.println("Please select an valid number from 0-" + gameBoard.boardSize);
         }
 
-        if (Board.moveCounter == gameBoard.boardSize && Board.isGameOver != 1) { // if the board is full and there's no winner
+        if (Board.moveCounter == gameBoard.boardSize && board.isGameOver != 1) { // if the board is full and there's no winner
             handleReplay(gameBoard);
         }
     }
@@ -116,8 +116,8 @@ public class Game {
                     ? Board.currentPlayer : Board.adjustSpaces(Board.longerString, Board.currentPlayer));
             Board.moveCounter++;
             boolean winCheck = checkWinner(Board.currentPlayer, r, c);
-            if(winCheck) Board.isGameOver = 1;
-            if(Board.isGameOver != 1) setPlayer();
+            if(winCheck) board.isGameOver = 1;
+            if(board.isGameOver != 1) setPlayer();
             turnSuccess = true;
         }
         return turnSuccess;

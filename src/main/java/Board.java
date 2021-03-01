@@ -8,7 +8,7 @@ class Board {
     int boardSize;
     static String currentPlayer;
     static String[] players;
-    static int isGameOver;
+    int isGameOver;
     static Map<Integer, int[]> position;
     static int longerString;
 
