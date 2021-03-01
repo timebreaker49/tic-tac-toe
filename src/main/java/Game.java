@@ -6,17 +6,17 @@ import java.util.List;
 import java.util.Scanner;
 
 public class Game {
-    static Scanner scanner;
+    Scanner scanner;
     Board board;
 
-    public Board initializeGame() {
+    public void initializeGame() {
         scanner = new Scanner(System.in);
         System.out.println("Are you ready to play?!?! Enter 'y' or 'n'");
         validateYOrN(scanner.nextLine());
-        return createBoard();
+        createBoard();
     }
 
-    private Board createBoard() {
+    private void createBoard() {
 
         System.out.println("Would you like to select the size of the board? 'y' or n'");
         String wantsToSelectBoardSize = validateYOrN(scanner.nextLine());
@@ -41,10 +41,9 @@ public class Game {
                 + "Here is our starting player!! : " + Board.currentPlayer
                 + "\nPlayer 1 (" + Board.currentPlayer + "), pick a number"
                 + "\nfrom 0 to " + (board.boardSize - 1)  + " to make your mark!");
-        return board;
     }
 
-    private static String[] selectPlayerNames() {
+    private String[] selectPlayerNames() {
         System.out.println("Player one, input the name you'd like for your character: ");
         String playerOne = scanner.nextLine();
         System.out.println("Player one(aka " + playerOne + "), I hope you like that name, because you're stuck with it");
@@ -54,7 +53,7 @@ public class Game {
         return new String[] {playerOne, playerTwo};
     }
 
-    private static int selectBoardSize() {
+    private int selectBoardSize() {
         System.out.println("Select board size by choosing a number 3 to 10");
         String boardSize = scanner.nextLine();
         String digitCheck = "\\d+";
@@ -67,11 +66,11 @@ public class Game {
 
     public void runGame() {
         while (board.isGameOver < 1 && Board.moveCounter < board.boardSize) {
-            processTurn(board);
+            processTurn();
         }
     }
 
-    private void processTurn(Board gameBoard) {
+    private void processTurn() {
         String selection = scanner.nextLine();
         String digitCheck = "\\d+";
         // if valid digit, see if it can be placed on the board
@@ -79,31 +78,30 @@ public class Game {
             boolean turnSuccess = markBoard(selection);
             if (turnSuccess && board.isGameOver == 1) {
                 System.out.println("Congratulations, we have a winner!! Good job player " + Board.currentPlayer + "\n\nHere's the final board");
-                gameBoard.print();
-                gameBoard= handleReplay(gameBoard);
+                board.print();
+                handleReplay();
             } else if (!turnSuccess) { // spot taken, try again
                 System.out.println("Sorry, that spot is taken! Please pick a different spot\n");
             } else { // turn success and game continues
                 System.out.println("Turn successful! " + Board.currentPlayer + ", you're up next!\n");
             }
             if(board.isGameOver != 1 && Board.moveCounter > 0) { // prints the game board while game is not over
-                gameBoard.print();
+                board.print();
             }
         } else { // invalid entry
-            System.out.println("Please select an valid number from 0-" + gameBoard.boardSize);
+            System.out.println("Please select an valid number from 0-" + board.boardSize);
         }
 
-        if (Board.moveCounter == gameBoard.boardSize && board.isGameOver != 1) { // if the board is full and there's no winner
-            handleReplay(gameBoard);
+        if (Board.moveCounter == board.boardSize && board.isGameOver != 1) { // if the board is full and there's no winner
+            handleReplay();
         }
     }
 
-    private Board handleReplay(Board gameBoard) {
+    private void handleReplay() {
         System.out.println("\nWould you like to play again? Please input 'y' or 'n'");
         if (validateYOrN(scanner.nextLine()).equals("y")) {
-            gameBoard = createBoard();
+            createBoard();
         }
-        return gameBoard;
     }
 
     private boolean markBoard(String index) {
@@ -184,7 +182,7 @@ public class Game {
         return (upperLeftDiag || upperRightDiag);
     }
 
-    private static String validateYOrN(String answer) {
+    private String validateYOrN(String answer) {
         List<String> yOrN = new ArrayList<>(Arrays.asList("y", "n"));
         while(!yOrN.contains(answer)) {
             System.out.println("Please enter 'y' or 'n'");
