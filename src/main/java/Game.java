@@ -24,7 +24,7 @@ public class Game {
     }
 
     private void createBoard() {
-
+// this is where I need to refactor game board creation logic
         System.out.println("Would you like to select the size of the board? 'y' or n'");
         String wantsToSelectBoardSize = validateYOrN(scanner.nextLine());
 
