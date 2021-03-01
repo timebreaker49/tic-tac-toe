@@ -12,7 +12,11 @@ public class Game {
     public void initializeGame() {
         scanner = new Scanner(System.in);
         System.out.println("Are you ready to play?!?! Enter 'y' or 'n'");
-        validateYOrN(scanner.nextLine());
+        String s = scanner.nextLine();
+        while(!s.equals("y")) {
+            System.out.println("How about now? Please enter 'y' or 'n'");
+            s = scanner.nextLine();
+        }
         createBoard();
     }
 
