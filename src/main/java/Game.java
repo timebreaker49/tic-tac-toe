@@ -65,7 +65,7 @@ public class Game {
     }
 
     public void runGame() {
-        while (board.isGameOver < 1 && Board.moveCounter < board.boardSize) {
+        while (board.isGameOver < 1 && board.moveCounter < board.boardSize) {
             processTurn();
         }
     }
@@ -85,14 +85,15 @@ public class Game {
             } else { // turn success and game continues
                 System.out.println("Turn successful! " + Board.currentPlayer + ", you're up next!\n");
             }
-            if(board.isGameOver != 1 && Board.moveCounter > 0) { // prints the game board while game is not over
+            if(board.isGameOver != 1 && board.moveCounter > 0) { // prints the game board while game is not over
                 board.print();
             }
         } else { // invalid entry
             System.out.println("Please select an valid number from 0-" + board.boardSize);
         }
 
-        if (Board.moveCounter == board.boardSize && board.isGameOver != 1) { // if the board is full and there's no winner
+        if (board.moveCounter == board.boardSize && board.isGameOver != 1) { // if the board is full and there's no winner
+            System.out.println("\nLooks like there was a tie!");
             handleReplay();
         }
     }
@@ -112,7 +113,7 @@ public class Game {
         if (board.board[r][c].trim().matches(digitCheck)) {
             board.board[r][c] = (Board.currentPlayer.equals(Board.players[board.longerPlayerString])
                     ? Board.currentPlayer : Board.adjustSpaces(board.longerPlayerString, Board.currentPlayer));
-            Board.moveCounter++;
+            board.moveCounter++;
             boolean winCheck = checkWinner(Board.currentPlayer, r, c);
             if(winCheck) board.isGameOver = 1;
             if(board.isGameOver != 1) setPlayer();

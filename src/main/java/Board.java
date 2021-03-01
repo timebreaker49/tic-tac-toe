@@ -4,7 +4,7 @@ import java.util.*;
 
 class Board {
     String[][] board;
-    static int moveCounter;
+    int moveCounter;
     int boardSize;
     static String currentPlayer;
     static String[] players;
