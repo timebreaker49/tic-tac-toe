@@ -110,8 +110,8 @@ public class Game {
         int r = pos[0], c = pos[1];
         String digitCheck = "\\d+";
         if (board.board[r][c].trim().matches(digitCheck)) {
-            board.board[r][c] = (Board.currentPlayer.equals(Board.players[Board.longerString])
-                    ? Board.currentPlayer : Board.adjustSpaces(Board.longerString, Board.currentPlayer));
+            board.board[r][c] = (Board.currentPlayer.equals(Board.players[board.longerPlayerString])
+                    ? Board.currentPlayer : Board.adjustSpaces(board.longerPlayerString, Board.currentPlayer));
             Board.moveCounter++;
             boolean winCheck = checkWinner(Board.currentPlayer, r, c);
             if(winCheck) board.isGameOver = 1;
