@@ -9,14 +9,14 @@ public class Game {
     static Scanner scanner;
     Board board;
 
-    static Board initializeGame() {
+    public Board initializeGame() {
         scanner = new Scanner(System.in);
         System.out.println("Are you ready to play?!?! Enter 'y' or 'n'");
         validateYOrN(scanner.nextLine());
         return createBoard();
     }
 
-    static Board createBoard() {
+    private Board createBoard() {
 
         System.out.println("Would you like to select the size of the board? 'y' or n'");
         String wantsToSelectBoardSize = validateYOrN(scanner.nextLine());
@@ -26,7 +26,7 @@ public class Game {
         System.out.println("Would you like to select your player character? Enter 'y' or 'n'");
         String wantsToSelectPlayerNames = validateYOrN(scanner.nextLine());
 
-        Board board = (wantsToSelectPlayerNames.equals("y")) ? new Board(selectPlayerNames(), sizeOfBoard) : new Board(sizeOfBoard);
+        board = (wantsToSelectPlayerNames.equals("y")) ? new Board(selectPlayerNames(), sizeOfBoard) : new Board(sizeOfBoard);
         System.out.println("----------------"
                 + "\nProducing Board!..."
                 + "\n----------------");
@@ -65,13 +65,13 @@ public class Game {
         return Integer.parseInt(boardSize);
     }
 
-    void runGame(Board gameBoard) {
-        while (board.isGameOver < 1 && Board.moveCounter < gameBoard.boardSize) {
-            processTurn(gameBoard);
+    public void runGame() {
+        while (board.isGameOver < 1 && Board.moveCounter < board.boardSize) {
+            processTurn(board);
         }
     }
 
-    void processTurn(Board gameBoard) {
+    private void processTurn(Board gameBoard) {
         String selection = scanner.nextLine();
         String digitCheck = "\\d+";
         // if valid digit, see if it can be placed on the board
@@ -98,7 +98,7 @@ public class Game {
         }
     }
 
-    private static Board handleReplay(Board gameBoard) {
+    private Board handleReplay(Board gameBoard) {
         System.out.println("\nWould you like to play again? Please input 'y' or 'n'");
         if (validateYOrN(scanner.nextLine()).equals("y")) {
             gameBoard = createBoard();
@@ -106,7 +106,7 @@ public class Game {
         return gameBoard;
     }
 
-    boolean markBoard(String index) {
+    private boolean markBoard(String index) {
         int[] pos = Board.positionLookup(Integer.parseInt(index));
         boolean turnSuccess = false;
         int r = pos[0], c = pos[1];
@@ -128,7 +128,7 @@ public class Game {
             ? Board.players[1] : Board.players[0]; // updates current player
     }
 
-    boolean checkWinner(String playerString, int row, int column) {
+    private boolean checkWinner(String playerString, int row, int column) {
         // check row for winner
         boolean rowWinner = checkRow(playerString, row);
         // check column for winner
@@ -139,7 +139,7 @@ public class Game {
         return (rowWinner || columnWinner || diagonalWinner);
     }
 
-    boolean checkRow(String playerString, int row) {
+    private boolean checkRow(String playerString, int row) {
         int j = 0;
         while (j < board.board[0].length) {
             String checkedValue = board.board[row][j++].trim();
@@ -148,7 +148,7 @@ public class Game {
         return true;
     }
 
-    boolean checkColumn(String playerString, int column) {
+    private boolean checkColumn(String playerString, int column) {
         int i = 0;
         while (i < board.board.length) {
             String checkedValue = board.board[i++][column].trim();
@@ -157,7 +157,7 @@ public class Game {
         return true;
     }
 
-    boolean checkDiagonal(String playerString) {
+    private boolean checkDiagonal(String playerString) {
         // check to see if it's upper left diagonal or upper right diagonal
         boolean upperLeftDiag = false;
         boolean upperRightDiag = false;
