@@ -6,10 +6,10 @@ class Board {
     String[][] board;
     int moveCounter;
     int boardSize;
-    static String currentPlayer;
-    static String[] players;
+    String currentPlayer;
+    String[] players;
     int isGameOver;
-    static Map<Integer, int[]> position;
+    Map<Integer, int[]> position;
     int longerPlayerString;
 
     public Board(int size) { // traditional board, x and o
@@ -47,11 +47,11 @@ class Board {
         isGameOver = 0;
     }
 
-    static int[] positionLookup(int key) {
+    public int[] positionLookup(int key) {
         return position.get(key);
     }
 
-    static String adjustSpaces(int longerPlayerString, String entry) {
+    public String adjustSpaces(int longerPlayerString, String entry) {
         int longestString = players[longerPlayerString].length();
         int currentEntryLength = entry.length();
 
