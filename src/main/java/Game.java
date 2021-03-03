@@ -20,20 +20,17 @@ public class Game {
             s = scanner.nextLine();
         }
         selectNumberOfGames();
-        createBoard();
+        createBoard(selectPlayerNames(), selectBoardSize());
     }
 
-    private void createBoard() {
-// this is where I need to refactor game board creation logic
-        System.out.println("Would you like to select the size of the board? 'y' or n'");
-        String wantsToSelectBoardSize = validateYOrN(scanner.nextLine());
+    public void runGame() {
+        while (board.isGameOver < 1 && board.moveCounter < board.boardSize) {
+            processTurn();
+        }
+    }
 
-        int sizeOfBoard = (!wantsToSelectBoardSize.equals("y")) ? 3 : selectBoardSize();
-
-        System.out.println("Would you like to select your player character? Enter 'y' or 'n'");
-        String wantsToSelectPlayerNames = validateYOrN(scanner.nextLine());
-
-        board = (wantsToSelectPlayerNames.equals("y")) ? new Board(selectPlayerNames(), sizeOfBoard) : new Board(sizeOfBoard);
+    private void createBoard(String[] players, int sizeOfBoard) {
+        board = new Board(players, sizeOfBoard);
         System.out.println("----------------"
                 + "\nProducing Board!..."
                 + "\n----------------");
@@ -51,23 +48,39 @@ public class Game {
     }
 
     private String[] selectPlayerNames() {
-        System.out.println("Player one, input the name you'd like for your character: ");
-        String playerOne = scanner.nextLine();
-        System.out.println("Player one(aka " + playerOne + "), I hope you like that name, because you're stuck with it");
-        System.out.println("Player two, you're up, select your name: ");
-        String playerTwo = scanner.nextLine();
+        System.out.println("Would you like to select your player character? Enter 'y' or 'n'");
+        String wantsToSelectPlayerNames = validateYOrN(scanner.nextLine());
+        String[] players = new String[]{"", ""};
 
-        return new String[] {playerOne, playerTwo};
+        if(wantsToSelectPlayerNames.equals("y")) {
+            System.out.println("Player one, input the name you'd like for your character: ");
+            players[0] = scanner.nextLine();
+            System.out.println("\nPlayer one(aka " + players[0] + "), I hope you like that name, because you're stuck with it");
+            System.out.println("Player two, you're up, select your name: ");
+            players[1] = scanner.nextLine();
+        } else {
+            players[0] = "x";
+            players[1] = "o";
+        }
+
+        return players;
     }
 
     private int selectBoardSize() {
-        System.out.println("Select board size by choosing a number 3 to 10");
-        String boardSize = scanner.nextLine();
-        String digitCheck = "\\d+";
-        while(!boardSize.matches(digitCheck) && Integer.parseInt(boardSize) > 3) {
-            System.out.println("Please select board size by choosing a number 3 to 10");
+        System.out.println("Would you like to select the size of the board? 'y' or n'");
+        String wantsToSelectBoardSize = validateYOrN(scanner.nextLine());
+        String boardSize;
+
+        if (wantsToSelectBoardSize.equals("y")) {
+            System.out.println("Select board size by choosing a number 3 to 10");
             boardSize = scanner.nextLine();
-        }
+            String digitCheck = "\\d+";
+            while(!boardSize.matches(digitCheck) && Integer.parseInt(boardSize) > 3) {
+                System.out.println("Please select board size by choosing a number 3 to 10");
+                boardSize = scanner.nextLine();
+            }
+        } else boardSize = "3";
+
         return Integer.parseInt(boardSize);
     }
 
@@ -81,12 +94,6 @@ public class Game {
         }
         numOfGames = Integer.parseInt(numGames);
         playerWins = new int[] {0,0};
-    }
-
-    public void runGame() {
-        while (board.isGameOver < 1 && board.moveCounter < board.boardSize) {
-            processTurn();
-        }
     }
 
     private void processTurn() {
@@ -124,16 +131,14 @@ public class Game {
             playerWins[1]++;
         }
         int numGamesForWin = numOfGames / 2 + 1;
-        if(playerWins[0] == numGamesForWin || playerWins[1] == numGamesForWin) {
-            System.out.println("the game is officially over! pack up and go home");
-        } else if(numOfGames > 1) {
-            System.out.println("Ready for the next round?!?!");
-            createBoard();
-        } else {
-            System.out.println("\nWould you like to play again? Please input 'y' or 'n'");
+        if (playerWins[0] == numGamesForWin || playerWins[1] == numGamesForWin) {
+            System.out.println("\nThe game is over! Would you like to play again? Please input 'y' or 'n'");
             if (validateYOrN(scanner.nextLine()).equals("y")) {
-                createBoard();
+                initializeGame();
             }
+        } else {
+            System.out.println("\nReady for the next round?!?!");
+            createBoard(board.players, (int) Math.sqrt(board.boardSize));
         }
     }
 
@@ -154,7 +159,7 @@ public class Game {
         return turnSuccess;
     }
 
-    void setPlayer() {
+    private void setPlayer() {
         board.currentPlayer = board.currentPlayer.equals(board.players[0])
             ? board.players[1] : board.players[0]; // updates current player
     }

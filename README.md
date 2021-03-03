@@ -10,7 +10,7 @@ The MVP is a command line game that assumes two players are sitting in front of 
 #### How it's played
 *First, run the program! When the game starts up:*
 - Players are prompted to begin the game
-- Once they have selected yes, they have the ability to specify the size of the board and their character string
+- Once they have selected yes, they have the ability to specify the size of the board as well as their character string
 - The first player to go is chosen by the computer
 - During their turn, players select a position on the board by selecting a number representing an open spot
     - If a player chooses an occupied spot, they're once again prompted to select a different spot 
@@ -19,7 +19,7 @@ The MVP is a command line game that assumes two players are sitting in front of 
 
 #### What I want to implement beyond this
 - Introduce 1 player mode, where you play against a computer
-- Best 'x' out of 'x' games (ex. keeping track of best 2 of 3)
+- ~~Best 'x' out of 'x' games (ex. keeping track of best 2 of 3)~~
 - ~~Allow users to select the character string they'd like to use for the game~~
 - ~~Create replay logic~~
 - ~~Vary size of the board~~
