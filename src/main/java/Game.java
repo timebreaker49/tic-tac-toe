@@ -1,15 +1,15 @@
 package main.java;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Scanner;
+import java.util.*;
 
 public class Game {
     Scanner scanner;
     Board board;
     int numOfGames;
     int[] playerWins;
+    // boolean 1-player mode (don't forget selectPlayerNames expects 2 players)
+    // marked / seen set
+    Boolean onePlayerMode;
 
     public void initializeGame() {
         scanner = new Scanner(System.in);
@@ -19,6 +19,7 @@ public class Game {
             System.out.println("How about now? Please enter 'y' or 'n'");
             s = scanner.nextLine();
         }
+        isOnePlayerMode();
         selectNumberOfGames();
         createBoard(selectPlayerNames(), selectBoardSize());
     }
@@ -26,6 +27,9 @@ public class Game {
     public void runGame() {
         while (board.isGameOver < 1 && board.moveCounter < board.boardSize) {
             processTurn();
+            // if boolean 1-player is True
+            // computerTurn, (will also have to check for winner)
+            if(onePlayerMode) computerTurn();
         }
     }
 
@@ -45,6 +49,12 @@ public class Game {
                 + "Here is our starting player!! : " + board.currentPlayer
                 + "\nPlayer 1 (" + board.currentPlayer + "), pick a number"
                 + "\nfrom 0 to " + (board.boardSize - 1)  + " to make your mark!");
+    }
+
+    private void isOnePlayerMode() {
+        System.out.println("Play against the computer? Enter 'y' for 1-player mode or 'n' for 2-player mode");
+        String playAgainstComputer = validateYOrN(scanner.nextLine());
+        onePlayerMode = playAgainstComputer.equals("y");
     }
 
     private String[] selectPlayerNames() {
@@ -116,7 +126,7 @@ public class Game {
             } else { // turn success and game continues
                 System.out.println("Turn successful! " + board.currentPlayer + ", you're up next!\n");
             }
-            if(board.isGameOver != 1 && board.moveCounter > 0) { // prints the game board while game is not over
+            if(board.isGameOver != 1 && board.moveCounter > 0 && !onePlayerMode) { // prints the game board while game is not over
                 board.print();
             }
         } else { // invalid entry
@@ -127,6 +137,47 @@ public class Game {
             System.out.println("\nLooks like there was a tie!");
             handleReplay();
         }
+    }
+
+    private void computerTurn() {
+        board.print();
+        int computerTurn = generateComputerTurnIndex();
+        markBoard(String.valueOf(computerTurn));
+        try {
+            Thread.sleep(2000);
+        }
+        catch(InterruptedException ex) {
+            Thread.currentThread().interrupt();
+        }
+        if (board.isGameOver == 1) {
+            System.out.println("Congratulations, we have a winner!! Good job player " + board.currentPlayer + "\n\nHere's the final board");
+            if (board.currentPlayer.equals(board.players[0])) {
+                playerWins[0]++;
+            } else {
+                playerWins[1]++;
+            }
+            board.print();
+            handleReplay();
+        } else { // turn success and game continues
+            System.out.println("\nComputer turn successful! " + board.currentPlayer + ", you're up next!\n");
+        }
+        if(board.isGameOver != 1 && board.moveCounter > 0) { // prints the game board while game is not over
+            board.print();
+        }
+    }
+
+    private int generateComputerTurnIndex() {
+        // understand what numbers are currently NOT picked
+        // pick a random number amongst those
+        Random random = new Random();
+        int index = random.nextInt(board.availablePosition.size());
+        boolean containsIndex = board.availablePosition.contains(index);
+        while(!containsIndex) {
+            index = random.nextInt(board.availablePosition.size());
+            containsIndex = board.availablePosition.contains(index);
+        }
+
+        return index;
     }
 
     private void handleReplay() {
@@ -150,6 +201,7 @@ public class Game {
         if (board.board[r][c].trim().matches(digitCheck)) {
             board.board[r][c] = (board.currentPlayer.equals(board.players[board.longerPlayerString])
                     ? board.currentPlayer : board.adjustSpaces(board.longerPlayerString, board.currentPlayer));
+            board.availablePosition.remove(Integer.parseInt(index));
             board.moveCounter++;
             boolean winCheck = checkWinner(board.currentPlayer, r, c);
             if(winCheck) board.isGameOver = 1;

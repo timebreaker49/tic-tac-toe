@@ -18,7 +18,8 @@ The MVP is a command line game that assumes two players are sitting in front of 
 - If all spots are filled on the board and neither player has won, the game is a draw
 
 #### What I want to implement beyond this
-- Introduce 1 player mode, where you play against a computer
+- Introduce 1 player mode, where you play against a computer (In progress)
+- Implement i18n for Japanese
 - ~~Best 'x' out of 'x' games (ex. keeping track of best 2 of 3)~~
 - ~~Allow users to select the character string they'd like to use for the game~~
 - ~~Create replay logic~~

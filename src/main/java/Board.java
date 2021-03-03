@@ -11,17 +11,20 @@ class Board {
     int isGameOver;
     Map<Integer, int[]> position;
     int longerPlayerString;
+    Set<Integer> availablePosition;
 
     public Board(String[] names, int size) { // board where users select player names
         board = new String[size][size];
         players = new String[] {names[0], names[1]};
         int positionIndex = 0;
         position = new HashMap<>();
+        availablePosition = new HashSet<>();
         longerPlayerString = players[0].length() > players[1].length() ? 0 : 1;
         for (int i = 0; i < board.length; i++) {
             for (int j = 0; j < board[0].length; j++) {
                 position.put(positionIndex, new int[] {i, j});
-                board[i][j] = adjustSpaces(longerPlayerString, String.valueOf(positionIndex++));
+                board[i][j] = adjustSpaces(longerPlayerString, String.valueOf(positionIndex));
+                availablePosition.add(positionIndex++);
             }
         }
         moveCounter = 0;
