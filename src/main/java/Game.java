@@ -104,6 +104,11 @@ public class Game {
             boolean turnSuccess = markBoard(selection);
             if (turnSuccess && board.isGameOver == 1) {
                 System.out.println("Congratulations, we have a winner!! Good job player " + board.currentPlayer + "\n\nHere's the final board");
+                if (board.currentPlayer.equals(board.players[0])) {
+                    playerWins[0]++;
+                } else {
+                    playerWins[1]++;
+                }
                 board.print();
                 handleReplay();
             } else if (!turnSuccess) { // spot taken, try again
@@ -125,11 +130,6 @@ public class Game {
     }
 
     private void handleReplay() {
-        if (board.currentPlayer.equals(board.players[0])) {
-            playerWins[0]++;
-        } else {
-            playerWins[1]++;
-        }
         int numGamesForWin = numOfGames / 2 + 1;
         if (playerWins[0] == numGamesForWin || playerWins[1] == numGamesForWin) {
             System.out.println("\nThe game is over! Would you like to play again? Please input 'y' or 'n'");
