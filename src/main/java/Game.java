@@ -27,7 +27,7 @@ public class Game {
     public void runGame() {
         while (board.isGameOver < 1 && board.moveCounter < board.boardSize) {
             processTurn();
-            if(onePlayerMode && board.isGameOver != 1) computerTurn();
+            if(onePlayerMode && board.isGameOver != 1 && !currentPlayer.equals(board.players[0])) computerTurn();
         }
     }
 
@@ -55,18 +55,20 @@ public class Game {
         System.out.println("Would you like to select your player character? Enter 'y' or 'n'");
         String wantsToSelectPlayerNames = validateYOrN(scanner.nextLine());
         String[] players = new String[]{"", ""};
-
         if(wantsToSelectPlayerNames.equals("y")) {
             System.out.println("Player one, input the name you'd like for your character: ");
             players[0] = scanner.nextLine();
             System.out.println("\nPlayer one(aka " + players[0] + "), I hope you like that name, because you're stuck with it");
-            System.out.println("Player two, you're up, select your name: ");
-            players[1] = scanner.nextLine();
+            if(onePlayerMode) {
+                players[1] = "Computer";
+            } else {
+                System.out.println("Player two, you're up, select your name: ");
+                players[1] = scanner.nextLine();
+            }
         } else {
             players[0] = "x";
             players[1] = "o";
         }
-
         return players;
     }
 
