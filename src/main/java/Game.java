@@ -7,9 +7,8 @@ public class Game {
     Board board;
     int numOfGames;
     int[] playerWins;
-    // boolean 1-player mode (don't forget selectPlayerNames expects 2 players)
-    // marked / seen set
     Boolean onePlayerMode;
+    String currentPlayer;
 
     public void initializeGame() {
         scanner = new Scanner(System.in);
@@ -22,14 +21,13 @@ public class Game {
         isOnePlayerMode();
         selectNumberOfGames();
         createBoard(selectPlayerNames(), selectBoardSize());
+        setInitialPlayer();
     }
 
     public void runGame() {
         while (board.isGameOver < 1 && board.moveCounter < board.boardSize) {
             processTurn();
-            // if boolean 1-player is True
-            // computerTurn, (will also have to check for winner)
-            if(onePlayerMode) computerTurn();
+            if(onePlayerMode && board.isGameOver != 1) computerTurn();
         }
     }
 
@@ -45,10 +43,6 @@ public class Game {
             Thread.currentThread().interrupt();
         }
         board.print();
-        System.out.println("\n"
-                + "Here is our starting player!! : " + board.currentPlayer
-                + "\nPlayer 1 (" + board.currentPlayer + "), pick a number"
-                + "\nfrom 0 to " + (board.boardSize - 1)  + " to make your mark!");
     }
 
     private void isOnePlayerMode() {
@@ -106,6 +100,14 @@ public class Game {
         playerWins = new int[] {0,0};
     }
 
+    private void setInitialPlayer() {
+        currentPlayer = Math.random() < 0.5 ? board.players[0] : board.players[1];
+        System.out.println("\n"
+                + "Here is our starting player!! : " + currentPlayer
+                + "\nPlayer 1 (" + currentPlayer + "), pick a number"
+                + "\nfrom 0 to " + (board.boardSize - 1)  + " to make your mark!");
+    }
+
     private void processTurn() {
         String selection = scanner.nextLine();
         String digitCheck = "\\d+";
@@ -113,8 +115,8 @@ public class Game {
         if (selection.matches(digitCheck) && board.position.containsKey(Integer.parseInt(selection))) {
             boolean turnSuccess = markBoard(selection);
             if (turnSuccess && board.isGameOver == 1) {
-                System.out.println("Congratulations, we have a winner!! Good job player " + board.currentPlayer + "\n\nHere's the final board");
-                if (board.currentPlayer.equals(board.players[0])) {
+                System.out.println("Congratulations, we have a winner!! Good job player " + currentPlayer + "\n\nHere's the final board");
+                if (currentPlayer.equals(board.players[0])) {
                     playerWins[0]++;
                 } else {
                     playerWins[1]++;
@@ -123,14 +125,16 @@ public class Game {
                 handleReplay();
             } else if (!turnSuccess) { // spot taken, try again
                 System.out.println("Sorry, that spot is taken! Please pick a different spot\n");
+                processTurn();
             } else { // turn success and game continues
-                System.out.println("Turn successful! " + board.currentPlayer + ", you're up next!\n");
+                System.out.println("Turn successful! " + currentPlayer + ", you're up next!\n");
             }
             if(board.isGameOver != 1 && board.moveCounter > 0 && !onePlayerMode) { // prints the game board while game is not over
                 board.print();
             }
         } else { // invalid entry
             System.out.println("Please select an valid number from 0-" + board.boardSize);
+            processTurn();
         }
 
         if (board.moveCounter == board.boardSize && board.isGameOver != 1) { // if the board is full and there's no winner
@@ -140,18 +144,13 @@ public class Game {
     }
 
     private void computerTurn() {
+        System.out.println("Computer turn, please wait!\n");
         board.print();
         int computerTurn = generateComputerTurnIndex();
-        markBoard(String.valueOf(computerTurn));
-        try {
-            Thread.sleep(2000);
-        }
-        catch(InterruptedException ex) {
-            Thread.currentThread().interrupt();
-        }
-        if (board.isGameOver == 1) {
-            System.out.println("Congratulations, we have a winner!! Good job player " + board.currentPlayer + "\n\nHere's the final board");
-            if (board.currentPlayer.equals(board.players[0])) {
+        boolean turnSuccess = markBoard(String.valueOf(computerTurn));
+        if (turnSuccess && board.isGameOver == 1) {
+            System.out.println("Congratulations, we have a winner!! Good job player " + currentPlayer + "\n\nHere's the final board");
+            if (currentPlayer.equals(board.players[0])) {
                 playerWins[0]++;
             } else {
                 playerWins[1]++;
@@ -159,7 +158,7 @@ public class Game {
             board.print();
             handleReplay();
         } else { // turn success and game continues
-            System.out.println("\nComputer turn successful! " + board.currentPlayer + ", you're up next!\n");
+            System.out.println("\nComputer turn successful! " + currentPlayer + ", you're up next!\n");
         }
         if(board.isGameOver != 1 && board.moveCounter > 0) { // prints the game board while game is not over
             board.print();
@@ -167,8 +166,6 @@ public class Game {
     }
 
     private int generateComputerTurnIndex() {
-        // understand what numbers are currently NOT picked
-        // pick a random number amongst those
         Random random = new Random();
         int index = random.nextInt(board.availablePosition.size());
         boolean containsIndex = board.availablePosition.contains(index);
@@ -190,6 +187,8 @@ public class Game {
         } else {
             System.out.println("\nReady for the next round?!?!");
             createBoard(board.players, (int) Math.sqrt(board.boardSize));
+            setPlayer();
+            System.out.println("\nNext player up! Go on, player " + currentPlayer);
         }
     }
 
@@ -199,11 +198,11 @@ public class Game {
         int r = pos[0], c = pos[1];
         String digitCheck = "\\d+";
         if (board.board[r][c].trim().matches(digitCheck)) {
-            board.board[r][c] = (board.currentPlayer.equals(board.players[board.longerPlayerString])
-                    ? board.currentPlayer : board.adjustSpaces(board.longerPlayerString, board.currentPlayer));
+            board.board[r][c] = (currentPlayer.equals(board.players[board.longerPlayerString])
+                    ? currentPlayer : board.adjustSpaces(board.longerPlayerString, currentPlayer));
             board.availablePosition.remove(Integer.parseInt(index));
             board.moveCounter++;
-            boolean winCheck = checkWinner(board.currentPlayer, r, c);
+            boolean winCheck = checkWinner(currentPlayer, r, c);
             if(winCheck) board.isGameOver = 1;
             if(board.isGameOver != 1) setPlayer();
             turnSuccess = true;
@@ -212,7 +211,7 @@ public class Game {
     }
 
     private void setPlayer() {
-        board.currentPlayer = board.currentPlayer.equals(board.players[0])
+        currentPlayer = currentPlayer.equals(board.players[0])
             ? board.players[1] : board.players[0]; // updates current player
     }
 

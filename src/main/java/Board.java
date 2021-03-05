@@ -29,7 +29,6 @@ class Board {
         }
         moveCounter = 0;
         boardSize = board.length * board[0].length;
-        currentPlayer = Math.random() < 0.5 ? players[0] : players[1];
         isGameOver = 0;
     }
 
