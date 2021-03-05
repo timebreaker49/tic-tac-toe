@@ -166,15 +166,10 @@ public class Game {
     }
 
     private int generateComputerTurnIndex() {
+        List<Integer> availableNumbers = new ArrayList<>(board.availablePosition); // gets values of available nums
         Random random = new Random();
         int index = random.nextInt(board.availablePosition.size());
-        boolean containsIndex = board.availablePosition.contains(index);
-        while(!containsIndex) {
-            index = random.nextInt(board.availablePosition.size());
-            containsIndex = board.availablePosition.contains(index);
-        }
-
-        return index;
+        return availableNumbers.get(index);
     }
 
     private void handleReplay() {
