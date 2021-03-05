@@ -136,7 +136,10 @@ public class Game {
             System.out.println("Please select an valid number from 0-" + board.boardSize);
             processTurn();
         }
+        processTie();
+    }
 
+    private void processTie() {
         if (board.moveCounter == board.boardSize && board.isGameOver != 1) { // if the board is full and there's no winner
             System.out.println("\nLooks like there was a tie!");
             handleReplay();
@@ -158,11 +161,13 @@ public class Game {
             board.print();
             handleReplay();
         } else { // turn success and game continues
-            System.out.println("\nComputer turn successful! " + currentPlayer + ", you're up next!\n");
+            System.out.println("\nComputer turn successful! ");
+            if(board.boardSize != board.moveCounter) System.out.println(currentPlayer + ", you're up next!\n");
         }
         if(board.isGameOver != 1 && board.moveCounter > 0) { // prints the game board while game is not over
             board.print();
         }
+        processTie();
     }
 
     private int generateComputerTurnIndex() {
