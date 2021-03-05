@@ -115,14 +115,7 @@ public class Game {
         if (selection.matches(digitCheck) && board.position.containsKey(Integer.parseInt(selection))) {
             boolean turnSuccess = markBoard(selection);
             if (turnSuccess && board.isGameOver == 1) {
-                System.out.println("Congratulations, we have a winner!! Good job player " + currentPlayer + "\n\nHere's the final board");
-                if (currentPlayer.equals(board.players[0])) {
-                    playerWins[0]++;
-                } else {
-                    playerWins[1]++;
-                }
-                board.print();
-                handleReplay();
+                processWin();
             } else if (!turnSuccess) { // spot taken, try again
                 System.out.println("Sorry, that spot is taken! Please pick a different spot\n");
                 processTurn();
@@ -146,20 +139,24 @@ public class Game {
         }
     }
 
+    private void processWin() {
+        System.out.println("Congratulations, we have a winner!! Good job player " + currentPlayer + "\n\nHere's the final board");
+        if (currentPlayer.equals(board.players[0])) {
+            playerWins[0]++;
+        } else {
+            playerWins[1]++;
+        }
+        board.print();
+        handleReplay();
+    }
+
     private void computerTurn() {
         System.out.println("Computer turn, please wait!\n");
         board.print();
         int computerTurn = generateComputerTurnIndex();
         boolean turnSuccess = markBoard(String.valueOf(computerTurn));
         if (turnSuccess && board.isGameOver == 1) {
-            System.out.println("Congratulations, we have a winner!! Good job player " + currentPlayer + "\n\nHere's the final board");
-            if (currentPlayer.equals(board.players[0])) {
-                playerWins[0]++;
-            } else {
-                playerWins[1]++;
-            }
-            board.print();
-            handleReplay();
+            processWin();
         } else { // turn success and game continues
             System.out.println("\nComputer turn successful! ");
             if(board.boardSize != board.moveCounter) System.out.println(currentPlayer + ", you're up next!\n");
