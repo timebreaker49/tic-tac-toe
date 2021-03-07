@@ -9,6 +9,7 @@ public class Game {
     int[] playerWins;
     Boolean onePlayerMode;
     String currentPlayer;
+    ResourceBundle gameText;
 
     public void initializeGame() {
         scanner = new Scanner(System.in);
@@ -18,10 +19,30 @@ public class Game {
             System.out.println("How about now? Please enter 'y' or 'n'");
             s = scanner.nextLine();
         }
+        setLanguageResourceBundle(setLocale(selectLanguage()));
         isOnePlayerMode();
         selectNumberOfGames();
         createBoard(selectPlayerNames(), selectBoardSize());
         setInitialPlayer();
+    }
+
+    private String[] selectLanguage() {
+        System.out.println("Please select your language: e for 'English' or j for 'Japanese'");
+        String language = scanner.nextLine().toLowerCase().trim();
+        List<String> languages = new ArrayList<>(Arrays.asList("e","j"));
+        while(!languages.contains(language)) {
+            System.out.println("Please select 'e' for English or 'j' for Japanese");
+            language = scanner.nextLine().toLowerCase().trim();
+        }
+        return (language.equals("e")) ? new String[]{"en", "US"} : new String[]{"ja", "JP"};
+    }
+
+    private Locale setLocale(String[] locale) {
+        return new Locale(locale[0],locale[1]);
+    }
+
+    private void setLanguageResourceBundle(Locale locale) {
+        gameText = ResourceBundle.getBundle("main.java.i18n.GameText", locale);
     }
 
     public void runGame() {
@@ -46,7 +67,7 @@ public class Game {
     }
 
     private void isOnePlayerMode() {
-        System.out.println("Play against the computer? Enter 'y' for 1-player mode or 'n' for 2-player mode");
+        System.out.println(gameText.getString("isOnePlayerMode"));
         String playAgainstComputer = validateYOrN(scanner.nextLine());
         onePlayerMode = playAgainstComputer.equals("y");
     }
