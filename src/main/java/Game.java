@@ -54,8 +54,8 @@ public class Game {
 
     private void createBoard(String[] players, int sizeOfBoard) {
         board = new Board(players, sizeOfBoard);
-        System.out.println("----------------"
-                + "\nProducing Board!..."
+        System.out.println("----------------\n"
+                + getString("producingBoard")
                 + "\n----------------");
         try {
             Thread.sleep(1000);
@@ -66,24 +66,28 @@ public class Game {
         board.print();
     }
 
+    private String getString(String name) {
+        return gameText.getString(name);
+    }
+
     private void isOnePlayerMode() {
-        System.out.println(gameText.getString("isOnePlayerMode"));
+        System.out.println(getString("isOnePlayerMode"));
         String playAgainstComputer = validateYOrN(scanner.nextLine());
         onePlayerMode = playAgainstComputer.equals("y");
     }
 
     private String[] selectPlayerNames() {
-        System.out.println("Would you like to select your player character? Enter 'y' or 'n'");
+        System.out.println(getString("selectPlayerName") + getString("enterYOrN"));
         String wantsToSelectPlayerNames = validateYOrN(scanner.nextLine());
         String[] players = new String[]{"", ""};
         if(wantsToSelectPlayerNames.equals("y")) {
-            System.out.println("Player one, input the name you'd like for your character: ");
+            System.out.println(getString("playerOneNameInput"));
             players[0] = scanner.nextLine();
-            System.out.println("\nPlayer one(aka " + players[0] + "), I hope you like that name, because you're stuck with it");
+            System.out.println("\n" + getString("playerOneNameInputResponse") + players[0] + getString("playerOneNameInputResponsePredicate"));
             if(onePlayerMode) {
-                players[1] = "Computer";
+                players[1] = getString("computerName");
             } else {
-                System.out.println("Player two, you're up, select your name: ");
+                System.out.println(getString("playerTwoNameInput"));
                 players[1] = scanner.nextLine();
             }
         } else {
@@ -94,16 +98,16 @@ public class Game {
     }
 
     private int selectBoardSize() {
-        System.out.println("Would you like to select the size of the board? 'y' or n'");
+        System.out.println(getString("selectBoardSize") + " " + getString("enterYOrN"));
         String wantsToSelectBoardSize = validateYOrN(scanner.nextLine());
         String boardSize;
 
         if (wantsToSelectBoardSize.equals("y")) {
-            System.out.println("Select board size by choosing a number 3 to 10");
+            System.out.println(getString("selectBoardSizeNumber"));
             boardSize = scanner.nextLine();
             String digitCheck = "\\d+";
             while(!boardSize.matches(digitCheck) && Integer.parseInt(boardSize) > 3) {
-                System.out.println("Please select board size by choosing a number 3 to 10");
+                System.out.println(getString("selectBoardSizeNumber"));
                 boardSize = scanner.nextLine();
             }
         } else boardSize = "3";
@@ -112,11 +116,11 @@ public class Game {
     }
 
     private void selectNumberOfGames() {
-        System.out.println("Please enter how many games you'd like to play (by choosing a number 1 and 10)");
+        System.out.println(getString("numberOfGames"));
         String numGames = scanner.nextLine();
         String digitCheck = "\\d+";
         while(!numGames.matches(digitCheck)) {
-            System.out.println("Please select board size by choosing a number 1 to 10");
+            System.out.println(getString("oneToTen"));
             numGames = scanner.nextLine();
         }
         numOfGames = Integer.parseInt(numGames);
