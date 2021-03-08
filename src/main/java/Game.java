@@ -48,7 +48,7 @@ public class Game {
     public void runGame() {
         while (board.isGameOver < 1 && board.moveCounter < board.boardSize) {
             processTurn();
-            if(onePlayerMode && board.isGameOver != 1 && !currentPlayer.equals(board.players[0])) computerTurn();
+            if(onePlayerMode && board.isGameOver != 1) computerTurn();
         }
     }
 
@@ -128,7 +128,11 @@ public class Game {
     }
 
     private void setInitialPlayer() {
-        currentPlayer = Math.random() < 0.5 ? board.players[0] : board.players[1];
+        if(onePlayerMode) {
+            currentPlayer = board.players[0];
+        } else {
+            currentPlayer = Math.random() < 0.5 ? board.players[0] : board.players[1];
+        }
         System.out.println("\n"
                 + "Here is our starting player!! : " + currentPlayer
                 + "\nPlayer 1 (" + currentPlayer + "), pick a number"

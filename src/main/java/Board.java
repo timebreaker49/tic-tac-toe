@@ -6,7 +6,6 @@ class Board {
     String[][] board;
     int moveCounter;
     int boardSize;
-    String currentPlayer;
     String[] players;
     int isGameOver;
     Map<Integer, int[]> position;
