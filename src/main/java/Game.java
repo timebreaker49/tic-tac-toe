@@ -147,12 +147,11 @@ public class Game {
             if (turnSuccess && board.isGameOver == 1) {
                 processWin();
             } else if (!turnSuccess) { // spot taken, try again
-                System.out.println(getString("spotTaken"));
+                System.out.println(getString("spotTaken") + "\n");
+                board.print();
                 processTurn();
             } else { // turn success and game continues
                 System.out.println(getString("turnSuccessful") + " " + currentPlayer + "\n");
-            }
-            if(board.isGameOver != 1 && board.moveCounter > 0 && !onePlayerMode) { // prints the game board while game is not over
                 board.print();
             }
         } else { // invalid entry
