@@ -54,9 +54,9 @@ public class Game {
 
     private void createBoard(String[] players, int sizeOfBoard) {
         board = new Board(players, sizeOfBoard);
-        System.out.println("----------------\n"
-                + getString("producingBoard")
-                + "\n----------------");
+        System.out.println(getString("horizontalLine")
+                + "\n" + getString("producingBoard")
+                + "\n" + getString("horizontalLine"));
         try {
             Thread.sleep(1000);
         }
@@ -134,9 +134,8 @@ public class Game {
             currentPlayer = Math.random() < 0.5 ? board.players[0] : board.players[1];
         }
         System.out.println("\n"
-                + "Here is our starting player!! : " + currentPlayer
-                + "\nPlayer 1 (" + currentPlayer + "), pick a number"
-                + "\nfrom 0 to " + (board.boardSize - 1)  + " to make your mark!");
+                + getString("startingPlayer") + currentPlayer
+                + "\n" + getString("markBoard") + (board.boardSize - 1));
     }
 
     private void processTurn() {
@@ -148,16 +147,16 @@ public class Game {
             if (turnSuccess && board.isGameOver == 1) {
                 processWin();
             } else if (!turnSuccess) { // spot taken, try again
-                System.out.println("Sorry, that spot is taken! Please pick a different spot\n");
+                System.out.println(getString("spotTaken"));
                 processTurn();
             } else { // turn success and game continues
-                System.out.println("Turn successful! " + currentPlayer + ", you're up next!\n");
+                System.out.println(getString("turnSuccessful") + " " + currentPlayer + "\n");
             }
             if(board.isGameOver != 1 && board.moveCounter > 0 && !onePlayerMode) { // prints the game board while game is not over
                 board.print();
             }
         } else { // invalid entry
-            System.out.println("Please select an valid number from 0-" + board.boardSize);
+            System.out.println(getString("invalidEntry")+ (board.boardSize - 1));
             processTurn();
         }
         processTie();
@@ -165,13 +164,13 @@ public class Game {
 
     private void processTie() {
         if (board.moveCounter == board.boardSize && board.isGameOver != 1) { // if the board is full and there's no winner
-            System.out.println("\nLooks like there was a tie!");
+            System.out.println("\n" + getString("tieGame"));
             handleReplay();
         }
     }
 
     private void processWin() {
-        System.out.println("Congratulations, we have a winner!! Good job player " + currentPlayer + "\n\nHere's the final board");
+        System.out.println(getString("weHaveAWinner")+ " " + currentPlayer + "\n\n" + getString("finalBoardPrint"));
         if (currentPlayer.equals(board.players[0])) {
             playerWins[0]++;
         } else {
@@ -182,15 +181,15 @@ public class Game {
     }
 
     private void computerTurn() {
-        System.out.println("Computer turn, please wait!\n");
+        System.out.println(getString("computerTurn") + "\n");
         board.print();
         int computerTurn = generateComputerTurnIndex();
         boolean turnSuccess = markBoard(String.valueOf(computerTurn));
         if (turnSuccess && board.isGameOver == 1) {
             processWin();
         } else { // turn success and game continues
-            System.out.println("\nComputer turn successful! ");
-            if(board.boardSize != board.moveCounter) System.out.println(currentPlayer + ", you're up next!\n");
+            System.out.println("\n" + getString("computerTurnSuccessful"));
+            if(board.boardSize != board.moveCounter) System.out.println(getString("nextPlayer") + " " + currentPlayer + "\n");
         }
         if(board.isGameOver != 1 && board.moveCounter > 0) { // prints the game board while game is not over
             board.print();
@@ -208,15 +207,15 @@ public class Game {
     private void handleReplay() {
         int numGamesForWin = numOfGames / 2 + 1;
         if (playerWins[0] == numGamesForWin || playerWins[1] == numGamesForWin) {
-            System.out.println("\nThe game is over! Would you like to play again? Please input 'y' or 'n'");
+            System.out.println("\n" + getString("playAgain") + " " + getString("enterYOrN"));
             if (validateYOrN(scanner.nextLine()).equals("y")) {
                 initializeGame();
             }
         } else {
-            System.out.println("\nReady for the next round?!?!");
+            System.out.println("\n" + getString("nextRound"));
             createBoard(board.players, (int) Math.sqrt(board.boardSize));
             setPlayer();
-            System.out.println("\nNext player up! Go on, player " + currentPlayer);
+            System.out.println("\n" + getString("nextPlayer") + " " + currentPlayer);
         }
     }
 
@@ -302,7 +301,7 @@ public class Game {
     private String validateYOrN(String answer) {
         List<String> yOrN = new ArrayList<>(Arrays.asList("y", "n"));
         while(!yOrN.contains(answer)) {
-            System.out.println("Please enter 'y' or 'n'");
+            System.out.println(getString("enterYOrN"));
             answer = scanner.nextLine();
         }
         return answer;
