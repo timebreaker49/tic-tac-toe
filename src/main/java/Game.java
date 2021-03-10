@@ -77,13 +77,13 @@ public class Game {
     }
 
     private String[] selectPlayerNames() {
-        System.out.println(getString("selectPlayerName") + getString("enterYOrN"));
+        System.out.println(getString("selectPlayerName") + " " + getString("enterYOrN"));
         String wantsToSelectPlayerNames = validateYOrN(scanner.nextLine());
         String[] players = new String[]{"", ""};
         if(wantsToSelectPlayerNames.equals("y")) {
             System.out.println(getString("playerOneNameInput"));
             players[0] = scanner.nextLine();
-            System.out.println("\n" + getString("playerOneNameInputResponse") + players[0] + getString("playerOneNameInputResponsePredicate"));
+            System.out.println("\n" + getString("playerOneNameInputResponse") + " " + players[0] + getString("playerOneNameInputResponsePredicate"));
             if(onePlayerMode) {
                 players[1] = getString("computerName");
             } else {
@@ -134,7 +134,7 @@ public class Game {
             currentPlayer = Math.random() < 0.5 ? board.players[0] : board.players[1];
         }
         System.out.println("\n"
-                + getString("startingPlayer") + currentPlayer
+                + getString("startingPlayer") + " " + currentPlayer
                 + "\n" + getString("markBoard") + (board.boardSize - 1));
     }
 
