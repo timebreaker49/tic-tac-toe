@@ -106,7 +106,7 @@ public class Game {
             System.out.println(getString("selectBoardSizeNumber"));
             boardSize = scanner.nextLine();
             String digitCheck = "\\d+";
-            while(!boardSize.matches(digitCheck) && Integer.parseInt(boardSize) > 3) {
+            while((!boardSize.matches(digitCheck)) || (Integer.parseInt(boardSize) < 3 || Integer.parseInt(boardSize) > 10)) {
                 System.out.println(getString("selectBoardSizeNumber"));
                 boardSize = scanner.nextLine();
             }
